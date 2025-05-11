@@ -1,0 +1,34 @@
+import { Link as RouterLink } from 'react-router-dom';
+import { Box, Container, VStack, Heading, Text, Button, Icon } from '@chakra-ui/react';
+import { CheckCircle } from 'lucide-react';
+
+import useUpdatePayment from '../../hooks/useUpdatePayment';
+
+export default function PaymentSuccess() {
+  useUpdatePayment();
+
+  return (
+    <Box py={20}>
+      <Container maxW="container.md">
+        <VStack spacing={8} textAlign="center">
+          <Icon as={CheckCircle} boxSize={16} color="green.400" />
+          <Heading size="xl">¡Pago Exitoso!</Heading>
+          <Text color="whiteAlpha.800" fontSize="lg">
+            Tu compra ha sido procesada correctamente. Los tickets NFT serán transferidos a tu billetera pronto.
+          </Text>
+          <Button
+            as={RouterLink}
+            to="/"
+            size="lg"
+            bgGradient="linear(to-r, brand.500, purple.500)"
+            _hover={{
+              bgGradient: 'linear(to-r, brand.600, purple.600)',
+            }}
+          >
+            Volver al Inicio
+          </Button>
+        </VStack>
+      </Container>
+    </Box>
+  );
+}
