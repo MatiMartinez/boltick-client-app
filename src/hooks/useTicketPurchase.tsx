@@ -46,6 +46,10 @@ export default function useTicketPurchase() {
   }, [quantities, event.tickets]);
 
   const onPurchase = async () => {
+    console.log(isConnected);
+    console.log(address);
+    console.log(userInfo);
+
     if (!isConnected || !userInfo?.email) {
       toast({
         title: 'Conecta tu billetera',

@@ -17,12 +17,15 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Center,
+  Spinner,
 } from '@chakra-ui/react';
 import { Calendar, MapPin, QrCode, RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 
 import useUserTickets from '../hooks/useUserTickets';
+import EmptyTickets from '../components/EmptyTickets';
 
 export default function UserTickets() {
   const { tickets, isLoading, refreshTickets } = useUserTickets();
@@ -61,8 +64,12 @@ export default function UserTickets() {
             </Button>
           </Flex>
 
-          {tickets.length === 0 ? (
-            <>asd</>
+          {isLoading ? (
+            <Center py={20}>
+              <Spinner size="xl" color="brand.500" thickness="4px" />
+            </Center>
+          ) : tickets.length === 0 ? (
+            <EmptyTickets />
           ) : (
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={8}>
               {tickets.map((ticket) => (
@@ -74,24 +81,24 @@ export default function UserTickets() {
                   transition="transform 0.2s"
                   _hover={{ transform: 'translateY(-4px)' }}
                 >
-                  <Image src={ticket.imageUrl} alt={ticket.name} h="200px" w="full" objectFit="cover" />
+                  <Image src={ticket.imageUrl} alt={ticket.nft.ticketNumber} h="200px" w="full" objectFit="cover" />
                   <VStack p={6} spacing={4} align="stretch">
                     <Badge alignSelf="start" colorScheme="brand">
-                      {ticket.type}
+                      {ticket.createdAt}
                     </Badge>
-                    <Heading size="md">{ticket.name}</Heading>
+                    <Heading size="md">{ticket.createdAt}</Heading>
                     <VStack spacing={2} align="stretch">
                       <HStack color="whiteAlpha.700">
                         <Calendar size={16} />
-                        <Text fontSize="sm">{ticket.name}</Text>
+                        <Text fontSize="sm">{ticket.createdAt}</Text>
                       </HStack>
                       <HStack color="whiteAlpha.700">
                         <MapPin size={16} />
-                        <Text fontSize="sm">{ticket.name}</Text>
+                        <Text fontSize="sm">{ticket.createdAt}</Text>
                       </HStack>
                     </VStack>
                     <Text fontSize="sm" color="whiteAlpha.600">
-                      ID de Entrada: {ticket.name}
+                      ID de Entrada: {ticket.createdAt}
                     </Text>
                     <Button
                       leftIcon={<QrCode size={16} />}

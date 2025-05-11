@@ -40,14 +40,6 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
     init();
   }, []);
 
-  useEffect(() => {
-    if (isConnected) {
-      getAccounts();
-      getBalance();
-      getUserInfo();
-    }
-  }, [isConnected]);
-
   const init = async () => {
     try {
       const privateKeyProvider = new SolanaPrivateKeyProvider({
@@ -66,18 +58,17 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
         },
       });
 
-      const web3auth = new Web3Auth({
+      const web3authInstance = new Web3Auth({
         clientId: 'BFS1buOGa-_nwycrTVNXUqilBoKONejneVzfgS-_DV7FcK3ZCoaYIzE1xZEp0uRRwVwyHufh9YAJ_HIbeKn5OZ8',
         web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
         privateKeyProvider: privateKeyProvider,
       });
 
-      setWeb3auth(web3auth);
-      await web3auth.initModal();
-      setProvider(web3auth.provider);
+      await web3authInstance.initModal();
+      setWeb3auth(web3authInstance);
 
-      if (web3auth.connected) {
-        setIsConnected(true);
+      if (web3authInstance.connected && web3authInstance.provider) {
+        await onSuccessLogin(web3authInstance.provider, web3authInstance);
       }
     } catch (error) {
       console.error('Error initializing Web3Auth:', error);
@@ -91,24 +82,8 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
       const web3authProvider = await web3auth.connect();
 
       if (web3authProvider) {
-        if (web3auth.connected) {
-          setIsConnected(true);
-        }
-
-        setProvider(web3authProvider);
+        await onSuccessLogin(web3authProvider, web3auth);
       }
-
-      // Codigo comentado para obtener informacion del usuario
-      // if (web3authProvider) {
-      //   const provider = getProvider();
-      //   setProvider(provider);
-      //   setIsConnected(true);
-      //   const signer = await provider?.getSigner();
-      //   const address = await signer?.getAddress();
-      //   setAddress(address || null);
-      //   const userInfo = await getUserInfo();
-      //   setUserInfo(userInfo);
-      // }
     } catch (error) {
       console.error('Error connecting:', error);
     }
@@ -119,6 +94,7 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
       if (!web3auth) return;
 
       await web3auth.logout();
+
       setProvider(null);
       setIsConnected(false);
       setUserInfo(null);
@@ -129,10 +105,16 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
     }
   };
 
-  const getUserInfo = async () => {
-    try {
-      if (!web3auth) return;
+  const onSuccessLogin = async (provider: IProvider, web3auth: Web3Auth) => {
+    setProvider(provider);
+    setIsConnected(true);
+    await getAccounts(provider);
+    await getBalance(provider);
+    await getUserInfo(web3auth);
+  };
 
+  const getUserInfo = async (web3auth: Web3Auth) => {
+    try {
       const user = await web3auth.getUserInfo();
       setUserInfo(user);
     } catch (error) {
@@ -140,10 +122,8 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
     }
   };
 
-  const getAccounts = async () => {
+  const getAccounts = async (provider: IProvider) => {
     try {
-      if (!provider) return;
-
       const rpc = new SolanaRpc(provider);
       const address = await rpc.getAccounts();
       setAddress(address[0]);
@@ -152,10 +132,8 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
     }
   };
 
-  const getBalance = async () => {
+  const getBalance = async (provider: IProvider) => {
     try {
-      if (!provider) return;
-
       const rpc = new SolanaRpc(provider);
       const currentBalance = await rpc.getBalance();
       setBalance(currentBalance);

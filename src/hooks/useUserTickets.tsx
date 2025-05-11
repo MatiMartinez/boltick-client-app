@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useToast } from '@chakra-ui/react';
 
 import { ticketService } from '../services/tickets';
 import { Ticket } from '../models/ticket';
+import useSession from './useSession';
 
 const useUserTickets = () => {
   const toast = useToast();
+  const { isConnected, address } = useSession();
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -14,11 +16,13 @@ const useUserTickets = () => {
     refreshTickets();
   }, []);
 
-  const refreshTickets = useCallback(async () => {
+  const refreshTickets = async () => {
+    if (!isConnected || !address) return;
+
     setIsLoading(true);
 
     try {
-      const data = await ticketService.getTickets('AFzKCxdnNV3Sum3nWxs77iYBBdSfqj25PQJDq');
+      const data = await ticketService.getTickets(address);
       setTickets(data.tokens);
 
       toast({
@@ -39,7 +43,7 @@ const useUserTickets = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [toast]);
+  };
 
   return { tickets, isLoading, refreshTickets };
 };

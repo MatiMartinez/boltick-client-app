@@ -13,6 +13,7 @@ import PaymentProcessing from './pages/payment/PaymentProcessing';
 import PaymentError from './pages/payment/PaymentError';
 import PaymentUnknown from './pages/payment/PaymentUnknown';
 import Web3Provider from './contexts/Web3Context';
+import ProtectedRoute from './components/ProtectedRoute';
 
 export default function App() {
   return (
@@ -25,7 +26,14 @@ export default function App() {
               <Route path="/event/:id" element={<EventDetails />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/about" element={<About />} />
-              <Route path="/tickets" element={<UserTickets />} />
+              <Route
+                path="/tickets"
+                element={
+                  <ProtectedRoute>
+                    <UserTickets />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/payment/success" element={<PaymentSuccess />} />
               <Route path="/payment/processing" element={<PaymentProcessing />} />
               <Route path="/payment/error" element={<PaymentError />} />
