@@ -59,7 +59,7 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
       });
 
       const web3authInstance = new Web3Auth({
-        clientId: 'BFS1buOGa-_nwycrTVNXUqilBoKONejneVzfgS-_DV7FcK3ZCoaYIzE1xZEp0uRRwVwyHufh9YAJ_HIbeKn5OZ8',
+        clientId: import.meta.env.VITE_WEB3AUTH_CLIENTE_ID,
         web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
         privateKeyProvider: privateKeyProvider,
       });
