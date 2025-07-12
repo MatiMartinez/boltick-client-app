@@ -85,17 +85,15 @@ export default function useTicketPurchase() {
   };
 
   const generateNFTs = (): NFTDTO[] => {
-    return event.tickets.map((ticket) => {
-      const quantity = quantities[ticket.id];
-
-      return {
+    return event.tickets
+      .filter(ticket => quantities[ticket.id] > 0)
+      .map(ticket => ({
         collectionName: event.collectionName,
         collectionSymbol: event.collectionSymbol,
-        quantity: quantity,
+        quantity: quantities[ticket.id],
         type: ticket.name,
         unitPrice: ticket.price,
-      };
-    });
+      }));
   };
 
   return {

@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from "react-router-dom";
 import {
   Box,
   Container,
@@ -7,12 +7,23 @@ import {
   Text,
   Button,
   Icon,
-} from '@chakra-ui/react';
-import { HelpCircle } from 'lucide-react';
-import { Link as RouterLink } from 'react-router-dom';
+  Spinner,
+} from "@chakra-ui/react";
+import { HelpCircle } from "lucide-react";
+
+import useUpdatePayment from "../../hooks/useUpdatePayment";
 
 export default function PaymentUnknown() {
-  const navigate = useNavigate();
+  const { isLoading } = useUpdatePayment();
+
+  if (isLoading) {
+    return (
+      <Box py={20} textAlign="center">
+        <Spinner size="xl" color="gray.400" />
+        <Text mt={4}>Actualizando pago...</Text>
+      </Box>
+    );
+  }
 
   return (
     <Box py={20}>
@@ -21,7 +32,8 @@ export default function PaymentUnknown() {
           <Icon as={HelpCircle} boxSize={16} color="gray.400" />
           <Heading size="xl">Estado Desconocido</Heading>
           <Text color="whiteAlpha.800" fontSize="lg">
-            Ha ocurrido un error inesperado. Por favor, contacta con soporte si el problema persiste.
+            Ha ocurrido un error inesperado. Por favor, contacta con soporte si
+            el problema persiste.
           </Text>
           <Button
             as={RouterLink}

@@ -1,11 +1,29 @@
-import { Link as RouterLink } from 'react-router-dom';
-import { Box, Container, VStack, Heading, Text, Button, Icon, Spinner } from '@chakra-ui/react';
-import { Clock } from 'lucide-react';
+import { Link as RouterLink } from "react-router-dom";
+import {
+  Box,
+  Container,
+  VStack,
+  Heading,
+  Text,
+  Button,
+  Icon,
+  Spinner,
+} from "@chakra-ui/react";
+import { Clock } from "lucide-react";
 
-import useUpdatePayment from '../../hooks/useUpdatePayment';
+import useUpdatePayment from "../../hooks/useUpdatePayment";
 
 export default function PaymentProcessing() {
-  useUpdatePayment();
+  const { isLoading } = useUpdatePayment();
+
+  if (isLoading) {
+    return (
+      <Box py={20} textAlign="center">
+        <Spinner size="xl" color="yellow.400" />
+        <Text mt={4}>Actualizando pago...</Text>
+      </Box>
+    );
+  }
 
   return (
     <Box py={20}>
@@ -23,7 +41,7 @@ export default function PaymentProcessing() {
             size="lg"
             bgGradient="linear(to-r, brand.500, purple.500)"
             _hover={{
-              bgGradient: 'linear(to-r, brand.600, purple.600)',
+              bgGradient: "linear(to-r, brand.600, purple.600)",
             }}
           >
             Volver al Inicio

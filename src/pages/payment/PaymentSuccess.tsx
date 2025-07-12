@@ -1,11 +1,29 @@
-import { Link as RouterLink } from 'react-router-dom';
-import { Box, Container, VStack, Heading, Text, Button, Icon } from '@chakra-ui/react';
-import { CheckCircle } from 'lucide-react';
+import { Link as RouterLink } from "react-router-dom";
+import {
+  Box,
+  Container,
+  VStack,
+  Heading,
+  Text,
+  Button,
+  Icon,
+  Spinner,
+} from "@chakra-ui/react";
+import { CheckCircle } from "lucide-react";
 
-import useUpdatePayment from '../../hooks/useUpdatePayment';
+import useUpdatePayment from "../../hooks/useUpdatePayment";
 
 export default function PaymentSuccess() {
-  useUpdatePayment();
+  const { isLoading } = useUpdatePayment();
+
+  if (isLoading) {
+    return (
+      <Box py={20} textAlign="center">
+        <Spinner size="xl" color="green.400" />
+        <Text mt={4}>Actualizando pago...</Text>
+      </Box>
+    );
+  }
 
   return (
     <Box py={20}>
@@ -14,7 +32,8 @@ export default function PaymentSuccess() {
           <Icon as={CheckCircle} boxSize={16} color="green.400" />
           <Heading size="xl">¡Pago Exitoso!</Heading>
           <Text color="whiteAlpha.800" fontSize="lg">
-            Tu compra ha sido procesada correctamente. Los tickets NFT serán transferidos a tu billetera pronto.
+            Tu compra ha sido procesada correctamente. Los tickets NFT serán
+            transferidos a tu billetera pronto.
           </Text>
           <Button
             as={RouterLink}
@@ -22,7 +41,7 @@ export default function PaymentSuccess() {
             size="lg"
             bgGradient="linear(to-r, brand.500, purple.500)"
             _hover={{
-              bgGradient: 'linear(to-r, brand.600, purple.600)',
+              bgGradient: "linear(to-r, brand.600, purple.600)",
             }}
           >
             Volver al Inicio

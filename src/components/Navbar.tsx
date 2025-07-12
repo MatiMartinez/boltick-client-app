@@ -13,11 +13,11 @@ import {
   useDisclosure,
   VStack,
   Button,
-} from '@chakra-ui/react';
-import { Link as RouterLink } from 'react-router-dom';
-import { Menu } from 'lucide-react';
+} from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
+import { Menu } from "lucide-react";
 
-import WalletButton from './WalletButton';
+import WalletButton from "./WalletButton";
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -47,7 +47,11 @@ export default function Navbar() {
                 <ChakraLink as={RouterLink} to="/">
                   <HStack spacing={3}>
                     <Box fontSize="xl" fontWeight="600" letterSpacing="tight">
-                      BOLTICK
+                      <img
+                        src="/logo-boltick-white.svg"
+                        alt="Boltick Logo"
+                        width={120}
+                      />
                     </Box>
                   </HStack>
                 </ChakraLink>
@@ -101,13 +105,31 @@ export default function Navbar() {
 
           <DrawerBody>
             <VStack align="stretch" spacing={4} pt={4}>
-              <Button as={RouterLink} to="/" variant="ghost" justifyContent="flex-start" onClick={onClose}>
+              <Button
+                as={RouterLink}
+                to="/"
+                variant="ghost"
+                justifyContent="flex-start"
+                onClick={onClose}
+              >
                 Inicio
               </Button>
-              <Button as={RouterLink} to="/about" variant="ghost" justifyContent="flex-start" onClick={onClose}>
+              <Button
+                as={RouterLink}
+                to="/about"
+                variant="ghost"
+                justifyContent="flex-start"
+                onClick={onClose}
+              >
                 Nosotros
               </Button>
-              <Button as={RouterLink} to="/contact" variant="ghost" justifyContent="flex-start" onClick={onClose}>
+              <Button
+                as={RouterLink}
+                to="/contact"
+                variant="ghost"
+                justifyContent="flex-start"
+                onClick={onClose}
+              >
                 Contacto
               </Button>
             </VStack>
