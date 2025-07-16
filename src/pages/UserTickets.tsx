@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Box,
   Container,
@@ -17,12 +18,11 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-} from '@chakra-ui/react';
-import { Calendar, MapPin, QrCode, RefreshCw } from 'lucide-react';
-import { useState } from 'react';
-import { QRCodeSVG } from 'qrcode.react';
+} from "@chakra-ui/react";
+import { Calendar, MapPin, QrCode, RefreshCw } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 
-import useUserTickets from '../hooks/useUserTickets';
+import useUserTickets from "../hooks/useUserTickets";
 
 export default function UserTickets() {
   const { tickets, isLoading, refreshTickets } = useUserTickets();
@@ -41,7 +41,11 @@ export default function UserTickets() {
         <VStack spacing={12}>
           <Flex width="100%" justify="space-between" align="flex-start">
             <VStack spacing={4} align="start">
-              <Heading size="2xl" bgGradient="linear(to-r, white, whiteAlpha.800)" bgClip="text">
+              <Heading
+                size="2xl"
+                bgGradient="linear(to-r, white, whiteAlpha.800)"
+                bgClip="text"
+              >
                 Mis Tickets
               </Heading>
               <Text color="whiteAlpha.800" fontSize="lg">
@@ -55,14 +59,40 @@ export default function UserTickets() {
               loadingText="Actualizando"
               variant="outline"
               borderColor="brand.400"
-              _hover={{ bg: 'brand.500' }}
             >
               Actualizar
             </Button>
           </Flex>
 
-          {tickets.length === 0 ? (
-            <>asd</>
+          {/* UX: Sin tickets */}
+          {tickets.length === 0 && !isLoading ? (
+            <VStack spacing={6} py={16} w="full">
+              <Box fontSize="64px" color="brand.400" as="span" aria-label="Ticket icon">
+                🎫
+              </Box>
+              <Heading size="lg" color="whiteAlpha.900" textAlign="center">
+                Aún no tienes tickets comprados.
+              </Heading>
+              <Text color="whiteAlpha.700" fontSize="md" textAlign="center" maxW="md">
+                ¡No te pierdas la oportunidad de vivir una experiencia única! Explora los eventos disponibles y adquiere tus tickets fácilmente.
+              </Text>
+              <Button
+                as="a"
+                href="/"
+                size="lg"
+                colorScheme="brand"
+                bgGradient="linear(to-r, brand.500, purple.500)"
+                _hover={{ bgGradient: "linear(to-r, brand.600, purple.600)" }}
+                px={8}
+                py={6}
+                fontWeight="bold"
+                fontSize="lg"
+                borderRadius="xl"
+                shadow="md"
+              >
+                Ver eventos disponibles
+              </Button>
+            </VStack>
           ) : (
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={8}>
               {tickets.map((ticket) => (
@@ -72,33 +102,39 @@ export default function UserTickets() {
                   borderRadius="xl"
                   overflow="hidden"
                   transition="transform 0.2s"
-                  _hover={{ transform: 'translateY(-4px)' }}
+                  _hover={{ transform: "translateY(-4px)" }}
                 >
-                  <Image src={ticket.imageUrl} alt={ticket.name} h="200px" w="full" objectFit="cover" />
+                  <Image
+                    src={ticket.imageUrl}
+                    alt={ticket.assetId}
+                    h="200px"
+                    w="full"
+                    objectFit="cover"
+                  />
                   <VStack p={6} spacing={4} align="stretch">
                     <Badge alignSelf="start" colorScheme="brand">
                       {ticket.type}
                     </Badge>
-                    <Heading size="md">{ticket.name}</Heading>
+                    <Heading size="md">{ticket.assetId}</Heading>
                     <VStack spacing={2} align="stretch">
                       <HStack color="whiteAlpha.700">
                         <Calendar size={16} />
-                        <Text fontSize="sm">{ticket.name}</Text>
+                        <Text fontSize="sm">{ticket.assetId}</Text>
                       </HStack>
                       <HStack color="whiteAlpha.700">
                         <MapPin size={16} />
-                        <Text fontSize="sm">{ticket.name}</Text>
+                        <Text fontSize="sm">{ticket.assetId}</Text>
                       </HStack>
                     </VStack>
                     <Text fontSize="sm" color="whiteAlpha.600">
-                      ID de Entrada: {ticket.name}
+                      ID de Entrada: {ticket.assetId}
                     </Text>
                     <Button
                       leftIcon={<QrCode size={16} />}
                       onClick={() => handleShowQR(ticket)}
                       variant="outline"
                       borderColor="brand.400"
-                      _hover={{ bg: 'brand.500' }}
+                      _hover={{ bg: "brand.500" }}
                     >
                       Mostrar QR
                     </Button>
@@ -117,8 +153,20 @@ export default function UserTickets() {
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing={6} py={6}>
-              <Box bg="white" p={4} borderRadius="xl" display="flex" justifyContent="center" alignItems="center">
-                <QRCodeSVG value="https://google.com" size={200} level="H" includeMargin />
+              <Box
+                bg="white"
+                p={4}
+                borderRadius="xl"
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <QRCodeSVG
+                  value="https://google.com"
+                  size={200}
+                  level="H"
+                  includeMargin
+                />
               </Box>
               {selectedTicket && (
                 <VStack spacing={2} align="center">

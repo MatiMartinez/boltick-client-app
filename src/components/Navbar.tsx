@@ -39,23 +39,17 @@ export default function Navbar() {
         <Container maxW="container.xl">
           <VStack spacing={4}>
             <Flex w="full" justify="space-between" align="center">
-              <HStack spacing={4}>
-                <Button variant="ghost" onClick={onOpen} p={2}>
-                  <Menu size={24} />
-                </Button>
-
-                <ChakraLink as={RouterLink} to="/">
-                  <HStack spacing={3}>
-                    <Box fontSize="xl" fontWeight="600" letterSpacing="tight">
-                      <img
-                        src="/logo-boltick-white.svg"
-                        alt="Boltick Logo"
-                        width={120}
-                      />
-                    </Box>
-                  </HStack>
-                </ChakraLink>
-              </HStack>
+              <ChakraLink as={RouterLink} to="/">
+                <HStack spacing={3}>
+                  <Box fontSize="xl" fontWeight="600" letterSpacing="tight">
+                    <img
+                      src="/logo-boltick-white.svg"
+                      alt="Boltick Logo"
+                      width={120}
+                    />
+                  </Box>
+                </HStack>
+              </ChakraLink>
 
               {/* <Hide below="md">
                 <Box flex={1} mx={8}>
@@ -74,8 +68,12 @@ export default function Navbar() {
                   </InputGroup>
                 </Box>
               </Hide> */}
-
-              <WalletButton />
+              <HStack spacing={4}>
+                <WalletButton />
+                <Button variant="ghost" onClick={onOpen} p={2}>
+                  <Menu size={24} />
+                </Button>
+              </HStack>
             </Flex>
 
             {/* <Show below="md">
@@ -97,7 +95,7 @@ export default function Navbar() {
         </Container>
       </Box>
 
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
+      <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent bg="gray.800">
           <DrawerCloseButton mt={2} mr={1} />

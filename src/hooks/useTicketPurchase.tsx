@@ -1,11 +1,11 @@
-import { useState, useMemo } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useToast } from '@chakra-ui/react';
+import { useState, useMemo } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "@chakra-ui/react";
 
-import useSession from './useSession';
-import { events } from '../consts/events';
-import { Event } from '../models/event';
-import { NFTDTO, paymentService } from '../services/payment';
+import useSession from "./useSession";
+import { events } from "../consts/events";
+import { Event } from "../models/event";
+import { NFTDTO, paymentService } from "../services/payment";
 
 export default function useTicketPurchase() {
   const { id } = useParams();
@@ -14,11 +14,11 @@ export default function useTicketPurchase() {
   const event = events.find((event) => event.id === id) as unknown as Event;
 
   if (!event) {
-    navigate('/');
+    navigate("/");
   }
 
   const toast = useToast();
-  const { isConnected, address, userInfo } = useSession();
+  const { isConnected, walletAddress, userInfo } = useSession();
 
   const [quantities, setQuantities] = useState<Record<string, number>>(
     Object.fromEntries(event.tickets.map((ticket) => [ticket.id, 0]))
@@ -40,17 +40,22 @@ export default function useTicketPurchase() {
   };
 
   const summary = useMemo(() => {
-    const selectedTickets = event.tickets.filter((ticket) => quantities[ticket.id] > 0);
-    const total = selectedTickets.reduce((sum, ticket) => sum + ticket.price * quantities[ticket.id], 0);
+    const selectedTickets = event.tickets.filter(
+      (ticket) => quantities[ticket.id] > 0
+    );
+    const total = selectedTickets.reduce(
+      (sum, ticket) => sum + ticket.price * quantities[ticket.id],
+      0
+    );
     return { selectedTickets, total };
   }, [quantities, event.tickets]);
 
   const onPurchase = async () => {
     if (!isConnected || !userInfo?.email) {
       toast({
-        title: 'Conecta tu billetera',
-        description: 'Necesitas conectar tu billetera para comprar entradas',
-        status: 'warning',
+        title: "Conecta tu billetera",
+        description: "Necesitas conectar tu billetera para comprar entradas",
+        status: "warning",
         duration: 3000,
         isClosable: true,
       });
@@ -65,17 +70,18 @@ export default function useTicketPurchase() {
       const newPayment = await paymentService.createPayment({
         eventId: event.id,
         nfts: nfts,
-        provider: 'Mercado Pago',
+        provider: "Mercado Pago",
         userId: userInfo.email,
-        walletPublicKey: address,
+        walletPublicKey: walletAddress,
       });
 
       window.location.href = newPayment.url;
     } catch (error) {
       toast({
-        title: 'Error en la compra',
-        description: error instanceof Error ? error.message : 'Ha ocurrido un error',
-        status: 'error',
+        title: "Error en la compra",
+        description:
+          error instanceof Error ? error.message : "Ha ocurrido un error",
+        status: "error",
         duration: 3000,
         isClosable: true,
       });
@@ -86,8 +92,8 @@ export default function useTicketPurchase() {
 
   const generateNFTs = (): NFTDTO[] => {
     return event.tickets
-      .filter(ticket => quantities[ticket.id] > 0)
-      .map(ticket => ({
+      .filter((ticket) => quantities[ticket.id] > 0)
+      .map((ticket) => ({
         collectionName: event.collectionName,
         collectionSymbol: event.collectionSymbol,
         quantity: quantities[ticket.id],

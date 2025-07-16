@@ -1,7 +1,23 @@
-import useWeb3Context from './useWeb3Context';
+import useWeb3Context from "./useWeb3Context";
 
 export default function useSession() {
-  const { isConnected, address, balance, userInfo, connect, disconnect } = useWeb3Context();
+  const {
+    isConnected,
+    walletAddress,
+    balance,
+    userInfo,
+    connect,
+    disconnect,
+    refreshBalance,
+  } = useWeb3Context();
 
-  return { isConnected, address, balance, userInfo, connect, disconnect };
+  return {
+    isConnected,
+    walletAddress,
+    balance,
+    userInfo,
+    connect,
+    disconnect,
+    refreshBalance,
+  };
 }

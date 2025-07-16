@@ -1,49 +1,48 @@
-import { Connection, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
-import { CustomChainConfig, IProvider } from '@web3auth/base';
-import { SolanaWallet } from '@web3auth/solana-provider';
+import { Connection, PublicKey, LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { CustomChainConfig, IProvider } from "@web3auth/base";
+import { SolanaWallet } from "@web3auth/solana-provider";
 
 export default class SolanaRpc {
-  private provider: IProvider;
+  private solanaWallet: SolanaWallet;
 
   constructor(provider: IProvider) {
-    this.provider = provider;
+    this.solanaWallet = new SolanaWallet(provider);
   }
 
-  getAccounts = async (): Promise<string[]> => {
+  getWalletAddress = async (): Promise<string> => {
     try {
-      const solanaWallet = new SolanaWallet(this.provider);
-      const acc = await solanaWallet.requestAccounts();
-      return acc;
+      const accounts = await this.solanaWallet.requestAccounts();
+      return accounts[0];
     } catch (error) {
-      return error as string[];
+      console.error("Error getting wallet address:", error);
+      throw new Error("Failed to get wallet address");
     }
   };
 
   getBalance = async (): Promise<string> => {
     try {
-      const solanaWallet = new SolanaWallet(this.provider);
-      const connectionConfig = await solanaWallet.request<string[], CustomChainConfig>({
-        method: 'solana_provider_config',
+      const connectionConfig = await this.solanaWallet.request<
+        string[],
+        CustomChainConfig
+      >({
+        method: "solana_provider_config",
         params: [],
       });
+
       const conn = new Connection(connectionConfig.rpcTarget);
+      const accounts = await this.solanaWallet.requestAccounts();
 
-      const accounts = await solanaWallet.requestAccounts();
       const balance = await conn.getBalance(new PublicKey(accounts[0]));
-
       const balanceSol = balance / LAMPORTS_PER_SOL;
 
-      return balanceSol.toFixed(2);
+      return balanceSol.toFixed(4);
     } catch (error) {
-      return error as string;
+      console.error("Error getting balance:", error);
+      return "0.0000";
     }
   };
 
-  getPrivateKey = async (): Promise<string> => {
-    const privateKey = await this.provider.request({
-      method: 'solanaPrivateKey',
-    });
-
-    return privateKey as string;
+  refreshBalance = async (): Promise<string> => {
+    return await this.getBalance();
   };
 }

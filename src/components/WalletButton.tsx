@@ -9,21 +9,22 @@ import {
   HStack,
   useClipboard,
   useToast,
-} from '@chakra-ui/react';
-import { ChevronDown, Ticket, LogOut, Copy, Wallet } from 'lucide-react';
-import { Link as RouterLink } from 'react-router-dom';
-import useSession from '../hooks/useSession';
+} from "@chakra-ui/react";
+import { ChevronDown, Ticket, LogOut, Copy, Wallet } from "lucide-react";
+import { Link as RouterLink } from "react-router-dom";
+import useSession from "../hooks/useSession";
 
 export default function WalletButton() {
-  const { isConnected, address, balance, connect, disconnect } = useSession();
-  const { onCopy } = useClipboard(address);
+  const { isConnected, walletAddress, balance, connect, disconnect } =
+    useSession();
+  const { onCopy } = useClipboard(walletAddress);
   const toast = useToast();
 
   const handleCopy = () => {
     onCopy();
     toast({
-      title: 'Dirección copiada',
-      status: 'success',
+      title: "Dirección copiada",
+      status: "success",
       duration: 2000,
       isClosable: true,
     });
@@ -35,7 +36,7 @@ export default function WalletButton() {
         onClick={connect}
         bgGradient="linear(to-r, blue.500, purple.500)"
         _hover={{
-          bgGradient: 'linear(to-r, brand.600, purple.600)',
+          bgGradient: "linear(to-r, brand.600, purple.600)",
         }}
       >
         Conectar
@@ -50,10 +51,10 @@ export default function WalletButton() {
         rightIcon={<ChevronDown size={20} />}
         bgGradient="linear(to-r, brand.500, purple.500)"
         _hover={{
-          bgGradient: 'linear(to-r, brand.600, purple.600)',
+          bgGradient: "linear(to-r, brand.600, purple.600)",
         }}
         _active={{
-          bgGradient: 'linear(to-r, brand.600, purple.600)',
+          bgGradient: "linear(to-r, brand.600, purple.600)",
         }}
         color="whiteAlpha.900"
       >
@@ -62,7 +63,14 @@ export default function WalletButton() {
 
       <MenuList bg="gray.700" borderColor="whiteAlpha.200" p={4} minW="300px">
         <VStack spacing={4} align="stretch">
-          <VStack w="full" bg="gray.600" p={4} borderRadius="lg" spacing={3} align="stretch">
+          <VStack
+            w="full"
+            bg="gray.600"
+            p={4}
+            borderRadius="lg"
+            spacing={3}
+            align="stretch"
+          >
             <HStack>
               <Wallet size={16} />
               <Text fontSize="sm">Billetera</Text>
@@ -76,7 +84,7 @@ export default function WalletButton() {
                 textOverflow="ellipsis"
                 maxW="200px"
               >
-                {address}
+                {walletAddress}
               </Text>
               <Button
                 size="sm"
@@ -99,7 +107,7 @@ export default function WalletButton() {
             to="/tickets"
             icon={<Ticket size={20} />}
             bg="transparent"
-            _hover={{ bg: 'gray.600' }}
+            _hover={{ bg: "gray.600" }}
             h="48px"
             borderRadius="md"
           >
@@ -108,7 +116,7 @@ export default function WalletButton() {
           <MenuItem
             icon={<LogOut size={20} />}
             bg="transparent"
-            _hover={{ bg: 'gray.600' }}
+            _hover={{ bg: "gray.600" }}
             h="48px"
             borderRadius="md"
             onClick={disconnect}

@@ -1,27 +1,34 @@
-import { createContext, useEffect, useState, ReactNode } from 'react';
-import { Web3Auth } from '@web3auth/modal';
-import { CHAIN_NAMESPACES, IProvider, WEB3AUTH_NETWORK, UserInfo } from '@web3auth/base';
-import { SolanaPrivateKeyProvider } from '@web3auth/solana-provider';
-import SolanaRpc from '../web3/solanaRPC';
+import { createContext, useEffect, useState, ReactNode } from "react";
+import { Web3Auth } from "@web3auth/modal";
+import { CHAIN_NAMESPACES, IProvider, WEB3AUTH_NETWORK } from "@web3auth/base";
+import { SolanaPrivateKeyProvider } from "@web3auth/solana-provider";
+
+import SolanaRpc from "../web3/solanaRPC";
+
+interface UserInfo {
+  name?: string;
+  email?: string;
+  profileImage?: string;
+}
 
 interface Web3ContextType {
   isConnected: boolean;
-  address: string;
-  userInfo: Partial<UserInfo> | null;
+  walletAddress: string;
   balance: string;
+  userInfo: UserInfo | null;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
-  provider: IProvider | null;
+  refreshBalance: () => Promise<void>;
 }
 
 export const Web3Context = createContext<Web3ContextType>({
   isConnected: false,
-  address: '',
+  walletAddress: "",
+  balance: "0.0000",
   userInfo: null,
-  balance: '',
   connect: async () => {},
   disconnect: async () => {},
-  provider: null,
+  refreshBalance: async () => {},
 });
 
 interface Web3ProviderProps {
@@ -32,55 +39,53 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
   const [web3auth, setWeb3auth] = useState<Web3Auth | null>(null);
   const [provider, setProvider] = useState<IProvider | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [userInfo, setUserInfo] = useState<Partial<UserInfo> | null>(null);
-  const [address, setAddress] = useState<string>('');
-  const [balance, setBalance] = useState<string>('');
+  const [walletAddress, setWalletAddress] = useState<string>("");
+  const [balance, setBalance] = useState<string>("0.0000");
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   useEffect(() => {
     init();
   }, []);
 
   useEffect(() => {
-    if (isConnected) {
-      getAccounts();
-      getBalance();
-      getUserInfo();
+    if (isConnected && provider) {
+      loadWalletData();
     }
-  }, [isConnected]);
+  }, [isConnected, provider]);
 
   const init = async () => {
     try {
       const privateKeyProvider = new SolanaPrivateKeyProvider({
         config: {
           chainConfig: {
-            chainId: '0x3',
+            chainId: "0x65",
             chainNamespace: CHAIN_NAMESPACES.SOLANA,
-            rpcTarget: 'https://api.devnet.solana.com',
-            tickerName: 'Solana',
-            ticker: 'SOL',
-            // decimals: 9,
-            blockExplorerUrl: 'https://explorer.solana.com',
-            logo: 'https://images.toruswallet.io/solana.svg',
-            displayName: 'Solana Devnet',
+            rpcTarget: import.meta.env.VITE_SOLANA_RPC_URL,
+            tickerName: "Solana",
+            ticker: "SOL",
+            decimals: 9,
+            blockExplorerUrl: "https://explorer.solana.com",
+            logo: "https://images.toruswallet.io/solana.svg",
+            displayName: "Solana Mainnet",
           },
         },
       });
 
       const web3auth = new Web3Auth({
-        clientId: 'BFS1buOGa-_nwycrTVNXUqilBoKONejneVzfgS-_DV7FcK3ZCoaYIzE1xZEp0uRRwVwyHufh9YAJ_HIbeKn5OZ8',
-        web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
+        clientId: import.meta.env.VITE_WEB3AUTH_CLIENTE_ID,
+        web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
         privateKeyProvider: privateKeyProvider,
       });
 
       setWeb3auth(web3auth);
       await web3auth.initModal();
-      setProvider(web3auth.provider);
 
       if (web3auth.connected) {
+        setProvider(web3auth.provider);
         setIsConnected(true);
       }
     } catch (error) {
-      console.error('Error initializing Web3Auth:', error);
+      console.error("Error initializing Web3Auth:", error);
     }
   };
 
@@ -90,27 +95,12 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
 
       const web3authProvider = await web3auth.connect();
 
-      if (web3authProvider) {
-        if (web3auth.connected) {
-          setIsConnected(true);
-        }
-
+      if (web3authProvider && web3auth.connected) {
         setProvider(web3authProvider);
+        setIsConnected(true);
       }
-
-      // Codigo comentado para obtener informacion del usuario
-      // if (web3authProvider) {
-      //   const provider = getProvider();
-      //   setProvider(provider);
-      //   setIsConnected(true);
-      //   const signer = await provider?.getSigner();
-      //   const address = await signer?.getAddress();
-      //   setAddress(address || null);
-      //   const userInfo = await getUserInfo();
-      //   setUserInfo(userInfo);
-      // }
     } catch (error) {
-      console.error('Error connecting:', error);
+      console.error("Error connecting:", error);
     }
   };
 
@@ -121,11 +111,29 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
       await web3auth.logout();
       setProvider(null);
       setIsConnected(false);
+      setWalletAddress("");
+      setBalance("0.0000");
       setUserInfo(null);
-      setAddress('');
-      setBalance('');
     } catch (error) {
-      console.error('Error disconnecting:', error);
+      console.error("Error disconnecting:", error);
+    }
+  };
+
+  const loadWalletData = async () => {
+    try {
+      if (!provider) return;
+
+      const rpc = new SolanaRpc(provider);
+
+      const address = await rpc.getWalletAddress();
+      setWalletAddress(address);
+
+      const currentBalance = await rpc.getBalance();
+      setBalance(currentBalance);
+
+      await getUserInfo();
+    } catch (error) {
+      console.error("Error loading wallet data:", error);
     }
   };
 
@@ -134,33 +142,25 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
       if (!web3auth) return;
 
       const user = await web3auth.getUserInfo();
-      setUserInfo(user);
+
+      setUserInfo({
+        name: user.name,
+        email: user.email,
+        profileImage: user.profileImage,
+      });
     } catch (error) {
-      console.error('Error getting user information:', error);
+      console.error("Error getting user info:", error);
     }
   };
 
-  const getAccounts = async () => {
+  const refreshBalance = async () => {
     try {
       if (!provider) return;
-
       const rpc = new SolanaRpc(provider);
-      const address = await rpc.getAccounts();
-      setAddress(address[0]);
-    } catch (error) {
-      console.error('Error getting user address:', error);
-    }
-  };
-
-  const getBalance = async () => {
-    try {
-      if (!provider) return;
-
-      const rpc = new SolanaRpc(provider);
-      const currentBalance = await rpc.getBalance();
+      const currentBalance = await rpc.refreshBalance();
       setBalance(currentBalance);
     } catch (error) {
-      console.error('Error getting user balance:', error);
+      console.error("Error refreshing balance:", error);
     }
   };
 
@@ -168,12 +168,12 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
     <Web3Context.Provider
       value={{
         isConnected,
-        userInfo,
-        address,
+        walletAddress,
         balance,
+        userInfo,
         connect,
         disconnect,
-        provider,
+        refreshBalance,
       }}
     >
       {children}

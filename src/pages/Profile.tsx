@@ -9,21 +9,22 @@ import {
   Button,
   HStack,
   Divider,
-} from '@chakra-ui/react';
-import { useWeb3 } from '../contexts/Web3Context';
-import { Copy, ExternalLink } from 'lucide-react';
-import { useToast } from '@chakra-ui/react';
+} from "@chakra-ui/react";
+import { Copy, ExternalLink } from "lucide-react";
+import { useToast } from "@chakra-ui/react";
+
+import useSession from "../hooks/useSession";
 
 export default function Profile() {
-  const { address, userInfo } = useWeb3();
+  const { walletAddress, userInfo } = useSession();
   const toast = useToast();
 
   const copyAddress = () => {
-    if (address) {
-      navigator.clipboard.writeText(address);
+    if (walletAddress) {
+      navigator.clipboard.writeText(walletAddress);
       toast({
-        title: 'Dirección copiada',
-        status: 'success',
+        title: "Dirección copiada",
+        status: "success",
         duration: 2000,
         isClosable: true,
       });
@@ -38,10 +39,10 @@ export default function Profile() {
             <Avatar
               size="2xl"
               src={userInfo?.profileImage}
-              name={userInfo?.name || 'Usuario'}
+              name={userInfo?.name || "Usuario"}
             />
             <VStack spacing={2}>
-              <Heading size="xl">{userInfo?.name || 'Usuario'}</Heading>
+              <Heading size="xl">{userInfo?.name || "Usuario"}</Heading>
               <Text color="whiteAlpha.700">{userInfo?.email}</Text>
             </VStack>
           </VStack>
@@ -57,7 +58,7 @@ export default function Profile() {
               <Heading size="md">Dirección de Billetera</Heading>
               <HStack justify="space-between">
                 <Text fontSize="sm" color="whiteAlpha.800">
-                  {address}
+                  {walletAddress}
                 </Text>
                 <HStack spacing={2}>
                   <Button
@@ -72,7 +73,7 @@ export default function Profile() {
                     size="sm"
                     variant="ghost"
                     as="a"
-                    href={`https://etherscan.io/address/${address}`}
+                    href={`https://etherscan.io/address/${walletAddress}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     title="Ver en Etherscan"
@@ -96,7 +97,7 @@ export default function Profile() {
                   Tipo de Autenticación
                 </Text>
                 <Text fontSize="sm" color="whiteAlpha.900">
-                  {userInfo?.typeOfLogin || 'Web3Auth'}
+                  {userInfo?.typeOfLogin || "Web3Auth"}
                 </Text>
               </VStack>
               <Divider borderColor="whiteAlpha.200" />
