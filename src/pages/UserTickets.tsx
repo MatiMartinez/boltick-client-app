@@ -67,14 +67,26 @@ export default function UserTickets() {
           {/* UX: Sin tickets */}
           {tickets.length === 0 && !isLoading ? (
             <VStack spacing={6} py={16} w="full">
-              <Box fontSize="64px" color="brand.400" as="span" aria-label="Ticket icon">
+              <Box
+                fontSize="64px"
+                color="brand.400"
+                as="span"
+                aria-label="Ticket icon"
+              >
                 🎫
               </Box>
               <Heading size="lg" color="whiteAlpha.900" textAlign="center">
                 Aún no tienes tickets comprados.
               </Heading>
-              <Text color="whiteAlpha.700" fontSize="md" textAlign="center" maxW="md">
-                ¡No te pierdas la oportunidad de vivir una experiencia única! Explora los eventos disponibles y adquiere tus tickets fácilmente.
+              <Text
+                color="whiteAlpha.700"
+                fontSize="md"
+                textAlign="center"
+                maxW="md"
+              >
+                ¡No te pierdas la oportunidad de vivir una experiencia única!
+                Explora los eventos disponibles y adquiere tus tickets
+                fácilmente.
               </Text>
               <Button
                 as="a"
@@ -105,7 +117,8 @@ export default function UserTickets() {
                   _hover={{ transform: "translateY(-4px)" }}
                 >
                   <Image
-                    src={ticket.imageUrl}
+                    // src={ticket.imageUrl}
+                    src="https://elevate.ca/wp-content/uploads/2022/04/galaxy-7040416_1280-1024x576.png"
                     alt={ticket.assetId}
                     h="200px"
                     w="full"
@@ -115,8 +128,10 @@ export default function UserTickets() {
                     <Badge alignSelf="start" colorScheme="brand">
                       {ticket.type}
                     </Badge>
-                    <Heading size="md">{ticket.assetId}</Heading>
-                    <VStack spacing={2} align="stretch">
+                    <Heading size="md">
+                      {ticket.collectionSymbol} - {ticket.collectionName}
+                    </Heading>
+                    {/* <VStack spacing={2} align="stretch">
                       <HStack color="whiteAlpha.700">
                         <Calendar size={16} />
                         <Text fontSize="sm">{ticket.assetId}</Text>
@@ -125,9 +140,9 @@ export default function UserTickets() {
                         <MapPin size={16} />
                         <Text fontSize="sm">{ticket.assetId}</Text>
                       </HStack>
-                    </VStack>
+                    </VStack> */}
                     <Text fontSize="sm" color="whiteAlpha.600">
-                      ID de Entrada: {ticket.assetId}
+                      ID de Entrada: {ticket.ticketNumber}
                     </Text>
                     <Button
                       leftIcon={<QrCode size={16} />}
