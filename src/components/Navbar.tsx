@@ -45,7 +45,7 @@ export default function Navbar() {
                 <HStack spacing={3}>
                   <Box fontSize="xl" fontWeight="600" letterSpacing="tight">
                     <img
-                      src="/logotipo-boltick-white.svg"
+                      src="/logotipo-boltick-white.png"
                       alt="Boltick Logo"
                       width={120}
                     />
