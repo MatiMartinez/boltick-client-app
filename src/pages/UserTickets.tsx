@@ -118,7 +118,7 @@ export default function UserTickets() {
                 >
                   <Image
                     // src={ticket.imageUrl}
-                    src="https://i.ibb.co/KxRJ3DMk/Untitled-design-4.png"
+                    src="https://i.ibb.co/4wT8FL1q/Untitled-design-2.png"
                     alt={ticket.assetId}
                     h="300px"
                     w="full"
