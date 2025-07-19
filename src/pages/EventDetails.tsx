@@ -12,19 +12,26 @@ import {
   Divider,
   IconButton,
   Flex,
-} from '@chakra-ui/react';
-import { Calendar, MapPin, Users, Clock, Plus, Minus } from 'lucide-react';
+} from "@chakra-ui/react";
+import { Calendar, MapPin, Users, Clock, Plus, Minus } from "lucide-react";
 
-import useTicketPurchase from '../hooks/useTicketPurchase';
-import { formatARS } from '../utils/currency';
+import useTicketPurchase from "../hooks/useTicketPurchase";
+import { formatARS } from "../utils/currency";
 
 export default function EventDetails() {
-  const { event, handleQuantityChange, isLoading, onPurchase, quantities, summary } = useTicketPurchase();
+  const {
+    event,
+    handleQuantityChange,
+    isLoading,
+    onPurchase,
+    quantities,
+    summary,
+  } = useTicketPurchase();
 
   return (
-    <Box py={12}>
+    <Box py={{ base: 5, md: 10 }}>
       <Container maxW="container.xl">
-        <Grid templateColumns={{ base: '1fr', lg: '3fr 2fr' }} gap={12}>
+        <Grid templateColumns={{ base: "1fr", lg: "3fr 2fr" }} gap={12}>
           {/* Left Column - Event Details */}
           <VStack align="stretch" spacing={8}>
             <Image
@@ -32,7 +39,7 @@ export default function EventDetails() {
               alt={event.name}
               borderRadius="2xl"
               objectFit="cover"
-              h={{ base: '200px', md: '350px' }}
+              h={{ base: "200px", md: "350px" }}
             />
 
             <VStack align="stretch" spacing={6}>
@@ -45,7 +52,10 @@ export default function EventDetails() {
                 <Text color="whiteAlpha.700">Evento #{event.edition}</Text>
               </HStack>
 
-              <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}>
+              <Grid
+                templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
+                gap={6}
+              >
                 <HStack color="whiteAlpha.800">
                   <Calendar size={20} />
                   <Text>{event.date}</Text>
@@ -114,7 +124,12 @@ export default function EventDetails() {
                         variant="outline"
                         size="sm"
                       />
-                      <Text w="40px" textAlign="center" fontSize="lg" fontWeight="medium">
+                      <Text
+                        w="40px"
+                        textAlign="center"
+                        fontSize="lg"
+                        fontWeight="medium"
+                      >
                         {quantities[ticket.id]}
                       </Text>
                       <IconButton
@@ -132,14 +147,22 @@ export default function EventDetails() {
             ))}
 
             {summary.selectedTickets.length > 0 && (
-              <VStack align="stretch" bg="gray.600" p={6} borderRadius="xl" spacing={4}>
+              <VStack
+                align="stretch"
+                bg="gray.600"
+                p={6}
+                borderRadius="xl"
+                spacing={4}
+              >
                 <Heading size="md">Resumen</Heading>
                 {summary.selectedTickets.map((tier) => (
                   <Flex key={tier.id} justify="space-between">
                     <Text>
                       {quantities[tier.id]}x {tier.name}
                     </Text>
-                    <Text fontWeight="bold">{formatARS(tier.price * quantities[tier.id])}</Text>
+                    <Text fontWeight="bold">
+                      {formatARS(tier.price * quantities[tier.id])}
+                    </Text>
                   </Flex>
                 ))}
                 <Divider borderColor="whiteAlpha.200" />
@@ -158,7 +181,7 @@ export default function EventDetails() {
               fontSize="lg"
               bgGradient="linear(to-r, brand.500, purple.500)"
               _hover={{
-                bgGradient: 'linear(to-r, brand.600, purple.600)',
+                bgGradient: "linear(to-r, brand.600, purple.600)",
               }}
               color="whiteAlpha.900"
               isDisabled={summary.selectedTickets.length === 0}
@@ -167,7 +190,7 @@ export default function EventDetails() {
               onClick={onPurchase}
             >
               {summary.selectedTickets.length === 0
-                ? 'Selecciona tus entradas'
+                ? "Selecciona tus entradas"
                 : `Comprar • ${formatARS(summary.total)}`}
             </Button>
           </VStack>

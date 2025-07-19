@@ -18,9 +18,11 @@ import { Link as RouterLink } from "react-router-dom";
 import { Menu } from "lucide-react";
 
 import WalletButton from "./WalletButton";
+import useSession from "../hooks/useSession";
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isConnected } = useSession();
 
   return (
     <>
@@ -112,6 +114,17 @@ export default function Navbar() {
               >
                 Inicio
               </Button>
+              {isConnected && (
+                <Button
+                  as={RouterLink}
+                  to="/tickets"
+                  variant="ghost"
+                  justifyContent="flex-start"
+                  onClick={onClose}
+                >
+                  Mis Tickets
+                </Button>
+              )}
               <Button
                 as={RouterLink}
                 to="/about"
@@ -120,6 +133,15 @@ export default function Navbar() {
                 onClick={onClose}
               >
                 Nosotros
+              </Button>
+              <Button
+                as={RouterLink}
+                to="/return-policy"
+                variant="ghost"
+                justifyContent="flex-start"
+                onClick={onClose}
+              >
+                Política de Devolución
               </Button>
               <Button
                 as={RouterLink}

@@ -7,7 +7,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { Facebook, Instagram, Twitter } from "lucide-react";
+import { Instagram } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -29,22 +29,6 @@ export default function Footer() {
           </VStack>
 
           <HStack spacing={6}>
-            <Link
-              href="#"
-              color="whiteAlpha.600"
-              _hover={{ color: "brand.400" }}
-              transition="color 0.2s"
-            >
-              <Facebook size={18} />
-            </Link>
-            <Link
-              href="#"
-              color="whiteAlpha.600"
-              _hover={{ color: "brand.400" }}
-              transition="color 0.2s"
-            >
-              <Twitter size={18} />
-            </Link>
             <Link
               href="#"
               color="whiteAlpha.600"
