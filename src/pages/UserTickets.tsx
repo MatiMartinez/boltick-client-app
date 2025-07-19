@@ -100,6 +100,7 @@ export default function UserTickets() {
                 fontSize="lg"
                 borderRadius="xl"
                 shadow="md"
+                color="whiteAlpha.900"
               >
                 Ver eventos disponibles
               </Button>
@@ -117,17 +118,14 @@ export default function UserTickets() {
                 >
                   <Image
                     // src={ticket.imageUrl}
-                    src="https://elevate.ca/wp-content/uploads/2022/04/galaxy-7040416_1280-1024x576.png"
+                    src="https://i.ibb.co/KxRJ3DMk/Untitled-design-4.png"
                     alt={ticket.assetId}
-                    h="200px"
+                    h="300px"
                     w="full"
                     objectFit="cover"
+                    objectPosition="center"
                   />
-                  <VStack
-                    p={{ base: 4, md: 6 }}
-                    spacing={{ base: 2, md: 4 }}
-                    align="stretch"
-                  >
+                  <VStack p={4} spacing={2} align="stretch">
                     <Badge alignSelf="start" colorScheme="brand">
                       {ticket.type}
                     </Badge>
