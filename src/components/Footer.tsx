@@ -30,7 +30,8 @@ export default function Footer() {
 
           <HStack spacing={6}>
             <Link
-              href="#"
+              href="https://www.instagram.com/boltick.web/"
+              target="_blank"
               color="whiteAlpha.600"
               _hover={{ color: "brand.400" }}
               transition="color 0.2s"
