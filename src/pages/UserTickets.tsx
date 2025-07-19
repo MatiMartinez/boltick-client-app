@@ -9,7 +9,6 @@ import {
   Image,
   Badge,
   Button,
-  HStack,
   Flex,
   Modal,
   ModalOverlay,
@@ -19,24 +18,25 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
-import { Calendar, MapPin, QrCode, RefreshCw } from "lucide-react";
+import { QrCode, RefreshCw } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 
 import useUserTickets from "../hooks/useUserTickets";
+import { formatFullDate } from "../utils/date";
 
 export default function UserTickets() {
-  const { tickets, isLoading, refreshTickets } = useUserTickets();
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedTicket, setSelectedTicket] = useState<any>(null);
-
-  const handleShowQR = (ticket: any) => {
-    setSelectedTicket(ticket);
-    onOpen();
-  };
+  const {
+    tickets,
+    isLoading,
+    refreshTickets,
+    selectedTicket,
+    isOpen,
+    onClose,
+    handleShowQR,
+  } = useUserTickets();
 
   return (
-    <Box py={20}>
+    <Box py={[0, 20]}>
       <Container maxW="container.xl">
         <VStack spacing={12}>
           <Flex width="100%" justify="space-between" align="flex-start">
@@ -64,7 +64,6 @@ export default function UserTickets() {
             </Button>
           </Flex>
 
-          {/* UX: Sin tickets */}
           {tickets.length === 0 && !isLoading ? (
             <VStack spacing={6} py={16} w="full">
               <Box
@@ -124,35 +123,37 @@ export default function UserTickets() {
                     w="full"
                     objectFit="cover"
                   />
-                  <VStack p={6} spacing={4} align="stretch">
+                  <VStack
+                    p={{ base: 4, md: 6 }}
+                    spacing={{ base: 2, md: 4 }}
+                    align="stretch"
+                  >
                     <Badge alignSelf="start" colorScheme="brand">
                       {ticket.type}
                     </Badge>
                     <Heading size="md">
                       {ticket.collectionSymbol} - {ticket.collectionName}
                     </Heading>
-                    {/* <VStack spacing={2} align="stretch">
-                      <HStack color="whiteAlpha.700">
-                        <Calendar size={16} />
-                        <Text fontSize="sm">{ticket.assetId}</Text>
-                      </HStack>
-                      <HStack color="whiteAlpha.700">
-                        <MapPin size={16} />
-                        <Text fontSize="sm">{ticket.assetId}</Text>
-                      </HStack>
-                    </VStack> */}
                     <Text fontSize="sm" color="whiteAlpha.600">
                       ID de Entrada: {ticket.ticketNumber}
                     </Text>
-                    <Button
-                      leftIcon={<QrCode size={16} />}
-                      onClick={() => handleShowQR(ticket)}
-                      variant="outline"
-                      borderColor="brand.400"
-                      _hover={{ bg: "brand.500" }}
-                    >
-                      Mostrar QR
-                    </Button>
+                    {ticket.used === 1 ? (
+                      <Text color="green.300" fontWeight="bold">
+                        {ticket.useDate
+                          ? `Ingreso ${formatFullDate(ticket.useDate)}`
+                          : "Sin información de ingreso"}
+                      </Text>
+                    ) : (
+                      <Button
+                        leftIcon={<QrCode size={16} />}
+                        onClick={() => handleShowQR(ticket)}
+                        variant="outline"
+                        borderColor="brand.400"
+                        _hover={{ bg: "brand.500" }}
+                      >
+                        Mostrar QR
+                      </Button>
+                    )}
                   </VStack>
                 </Box>
               ))}
@@ -185,9 +186,12 @@ export default function UserTickets() {
               </Box>
               {selectedTicket && (
                 <VStack spacing={2} align="center">
-                  <Text fontWeight="bold">{selectedTicket.eventName}</Text>
+                  <Text fontWeight="bold">
+                    {selectedTicket.collectionSymbol} -{" "}
+                    {selectedTicket.collectionName}
+                  </Text>
                   <Text fontSize="sm" color="whiteAlpha.700">
-                    ID: {selectedTicket.ticketId}
+                    ID: {selectedTicket.ticketNumber}
                   </Text>
                 </VStack>
               )}

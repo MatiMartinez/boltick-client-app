@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useToast } from "@chakra-ui/react";
+import { useDisclosure, useToast } from "@chakra-ui/react";
 
 import { ticketService } from "../services/tickets";
 import { Ticket } from "../models/ticket";
@@ -8,9 +8,11 @@ import useSession from "./useSession";
 const useUserTickets = () => {
   const toast = useToast();
   const { walletAddress } = useSession();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
 
   useEffect(() => {
     refreshTickets();
@@ -43,7 +45,20 @@ const useUserTickets = () => {
     }
   }, [toast, walletAddress]);
 
-  return { tickets, isLoading, refreshTickets };
+  const handleShowQR = (ticket: Ticket) => {
+    setSelectedTicket(ticket);
+    onOpen();
+  };
+
+  return {
+    tickets,
+    isLoading,
+    refreshTickets,
+    selectedTicket,
+    isOpen,
+    onClose,
+    handleShowQR,
+  };
 };
 
 export default useUserTickets;
