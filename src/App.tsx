@@ -8,6 +8,7 @@ import EventDetails from "./pages/EventDetails";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import UserTickets from "./pages/UserTickets";
+import PrivateRoute from "./components/PrivateRoute";
 import PaymentSuccess from "./pages/payment/PaymentSuccess";
 import PaymentProcessing from "./pages/payment/PaymentProcessing";
 import PaymentError from "./pages/payment/PaymentError";
@@ -26,7 +27,14 @@ export default function App() {
               <Route path="/event/:id" element={<EventDetails />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/about" element={<About />} />
-              <Route path="/tickets" element={<UserTickets />} />
+              <Route
+                path="/tickets"
+                element={
+                  <PrivateRoute>
+                    <UserTickets />
+                  </PrivateRoute>
+                }
+              />
               <Route path="/payment/success" element={<PaymentSuccess />} />
               <Route
                 path="/payment/processing"
