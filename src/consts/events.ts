@@ -38,4 +38,28 @@ export const events: Event[] = [
     ],
     time: "14:00 hs",
   },
+  {
+    id: "4421cb3d-a0cf-4e29-8250-51767063cd62",
+    artists: [{ name: "DJ's en vivo", description: "" }],
+    category: "Sunset",
+    collectionName: "Wine Activity #1",
+    collectionSymbol: "WINE",
+    createdAt: 1732388398000,
+    date: "09 de Agosto, 2025",
+    description:
+      "Sunset wine & after orgnanizado por Paax Producciones. Degustación de m'as de 10 bodegas, plan Bonarda, dirección de Turismo y dirección de Cultura. YO 🤍 BONARDA",
+    edition: 1,
+    image: "/wine-activity-1.webp",
+    location: "Centro de congreso y exposiciones Francisco",
+    name: "Wine Activity",
+    tickets: [
+      {
+        id: "d98c69a9-79f7-432c-a4f2-5e1e4bbd2cf5",
+        name: "General",
+        description: "Incluye copa de vino",
+        price: 15000,
+      },
+    ],
+    time: "19:00 hs - 02:00 hs",
+  },
 ];
