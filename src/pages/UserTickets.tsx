@@ -142,15 +142,22 @@ export default function UserTickets() {
                           : "Sin información de ingreso"}
                       </Text>
                     ) : (
-                      <Button
-                        leftIcon={<QrCode size={16} />}
-                        onClick={() => handleShowQR(ticket)}
-                        variant="outline"
-                        borderColor="brand.400"
-                        _hover={{ bg: "brand.500" }}
+                      // <Button
+                      //   leftIcon={<QrCode size={16} />}
+                      //   onClick={() => handleShowQR(ticket)}
+                      //   variant="outline"
+                      //   borderColor="brand.400"
+                      //   _hover={{ bg: "brand.500" }}
+                      // >
+                      //   Mostrar QR
+                      // </Button>
+                      <Text
+                        color="yellow.400"
+                        fontWeight="medium"
+                        fontSize="sm"
                       >
-                        Mostrar QR
-                      </Button>
+                        Tu QR se habilitará cerca de la fecha.
+                      </Text>
                     )}
                   </VStack>
                 </Box>

@@ -12,6 +12,7 @@ import {
   Divider,
   IconButton,
   Flex,
+  Link,
 } from "@chakra-ui/react";
 import { Calendar, MapPin, Users, Clock, Plus, Minus } from "lucide-react";
 
@@ -42,7 +43,7 @@ export default function EventDetails() {
               h={{ base: "200px", md: "350px" }}
             />
 
-            <VStack align="stretch" spacing={6}>
+            <VStack align="stretch" spacing={{ base: 4, md: 6 }}>
               <Heading size="2xl">{event.name}</Heading>
 
               <HStack spacing={6}>
@@ -54,7 +55,7 @@ export default function EventDetails() {
 
               <Grid
                 templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-                gap={6}
+                gap={{ base: 2, md: 6 }}
               >
                 <HStack color="whiteAlpha.800">
                   <Calendar size={20} />
@@ -66,20 +67,31 @@ export default function EventDetails() {
                 </HStack>
                 <HStack color="whiteAlpha.800">
                   <MapPin size={20} />
-                  <Text>{event.location}</Text>
+                  <Link
+                    href="https://maps.app.goo.gl/y3SvdpuJysCQcZyv9"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: "underline" }}
+                  >
+                    <Text>{event.location}</Text>
+                  </Link>
                 </HStack>
               </Grid>
 
               <Divider borderColor="whiteAlpha.200" />
 
-              <VStack align="stretch" spacing={4}>
+              <VStack align="stretch" spacing={{ base: 2, md: 4 }}>
                 <Heading size="md">Sobre este Evento</Heading>
-                <Text color="whiteAlpha.800" lineHeight="tall">
+                <Text
+                  color="whiteAlpha.800"
+                  lineHeight="tall"
+                  whiteSpace="pre-line"
+                >
                   {event.description}
                 </Text>
               </VStack>
 
-              <VStack align="stretch" spacing={4}>
+              <VStack align="stretch" spacing={{ base: 2, md: 4 }}>
                 <Heading size="md">Artistas Destacados</Heading>
                 <VStack align="flex-start">
                   {event.artists.map((artist, index) => (
@@ -93,10 +105,10 @@ export default function EventDetails() {
           </VStack>
 
           {/* Right Column - Ticket Selection */}
-          <VStack align="stretch" spacing={6}>
+          <VStack align="stretch" spacing={{ base: 2, md: 6 }}>
             <Heading size="lg">Seleccionar Entradas</Heading>
 
-            <HStack color="whiteAlpha.700">
+            <HStack color="whiteAlpha.700" mb={{ base: 2, md: 0 }}>
               <Users size={20} />
               <Text>Disponibilidad limitada</Text>
             </HStack>
@@ -156,14 +168,36 @@ export default function EventDetails() {
               >
                 <Heading size="md">Resumen</Heading>
                 {summary.selectedTickets.map((tier) => (
-                  <Flex key={tier.id} justify="space-between">
-                    <Text>
-                      {quantities[tier.id]}x {tier.name}
-                    </Text>
-                    <Text fontWeight="bold">
-                      {formatARS(tier.price * quantities[tier.id])}
-                    </Text>
-                  </Flex>
+                  <Box key={tier.id}>
+                    <Flex justify="space-between">
+                      <Text>
+                        {quantities[tier.id]}x {tier.name}
+                      </Text>
+                      <Text fontWeight="bold">
+                        {formatARS(tier.price * quantities[tier.id])}
+                      </Text>
+                    </Flex>
+                    <Flex
+                      justify="space-between"
+                      fontSize="sm"
+                      color="whiteAlpha.700"
+                      pl={4}
+                    >
+                      <Text>Subtotal</Text>
+                      <Text>
+                        {formatARS(tier.priceWithoutTax * quantities[tier.id])}
+                      </Text>
+                    </Flex>
+                    <Flex
+                      justify="space-between"
+                      fontSize="sm"
+                      color="whiteAlpha.700"
+                      pl={4}
+                    >
+                      <Text>Cargo por servicio</Text>
+                      <Text>{formatARS(tier.tax * quantities[tier.id])}</Text>
+                    </Flex>
+                  </Box>
                 ))}
                 <Divider borderColor="whiteAlpha.200" />
                 <Flex justify="space-between">

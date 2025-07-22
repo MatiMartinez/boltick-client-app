@@ -81,7 +81,7 @@ export default function EventList() {
                   >
                     {event.category}
                   </Badge>
-                  <Heading size="md" letterSpacing="tight">
+                  <Heading size="md" letterSpacing="tight" mt={1}>
                     {event.name}
                   </Heading>
 
