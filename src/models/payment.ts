@@ -10,6 +10,7 @@ export interface Payment {
   updatedAt: number;
   userId: string;
   walletPublicKey: string;
+  prName: string;
 }
 
 export interface NFT {
@@ -32,5 +33,5 @@ interface PaymentDetails {
   updatedAt: number;
 }
 
-export type Status = 'Pending' | 'Approved' | 'Rejected';
-export type Provider = 'Mercado Pago';
+export type Status = "Pending" | "Approved" | "Rejected";
+export type Provider = "Mercado Pago";

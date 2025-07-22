@@ -1,20 +1,29 @@
 import {
+  Badge,
   Box,
+  Button,
   Container,
+  Divider,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  Flex,
   Grid,
   Heading,
-  Text,
-  Image,
-  VStack,
   HStack,
-  Button,
-  Badge,
-  Divider,
   IconButton,
-  Flex,
+  Image,
   Link,
+  List,
+  ListItem,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
 import { Calendar, MapPin, Users, Clock, Plus, Minus } from "lucide-react";
+import { prList } from "../consts/prList";
 
 import useTicketPurchase from "../hooks/useTicketPurchase";
 import { formatARS } from "../utils/currency";
@@ -27,6 +36,12 @@ export default function EventDetails() {
     onPurchase,
     quantities,
     summary,
+    selectedPR,
+    openRRPPDrawer,
+    closeRRPPDrawer,
+    isRRPPDrawerOpen,
+    handleSelectPR,
+    removeRRPP,
   } = useTicketPurchase();
 
   return (
@@ -169,7 +184,7 @@ export default function EventDetails() {
                 <Heading size="md">Resumen</Heading>
                 {summary.selectedTickets.map((tier) => (
                   <Box key={tier.id}>
-                    <Flex justify="space-between">
+                    <Flex justify="space-between" align="center">
                       <Text>
                         {quantities[tier.id]}x {tier.name}
                       </Text>
@@ -208,6 +223,85 @@ export default function EventDetails() {
                 </Flex>
               </VStack>
             )}
+
+            {summary.selectedTickets.length > 0 && (
+              <Box
+                mt={4}
+                mb={2}
+                bg="gray.700"
+                borderRadius="xl"
+                boxShadow="md"
+                px={{ base: 4, md: 6 }}
+                py={4}
+                display="flex"
+                flexDirection="column"
+                gap={2}
+              >
+                <Text fontWeight="bold" mb={1} fontSize="md">
+                  ¿Fuiste invitado por un RRPP?
+                </Text>
+                {selectedPR ? (
+                  <Flex justifyContent="space-between" align="center" gap={3}>
+                    <Badge
+                      colorScheme="brand"
+                      fontSize="md"
+                      px={3}
+                      py={1}
+                      borderRadius="md"
+                    >
+                      {selectedPR}
+                    </Badge>
+                    <Button
+                      size="xs"
+                      variant="ghost"
+                      colorScheme="red"
+                      onClick={removeRRPP}
+                    >
+                      Remover selección
+                    </Button>
+                  </Flex>
+                ) : (
+                  <Button
+                    size="md"
+                    colorScheme="brand"
+                    variant="outline"
+                    onClick={openRRPPDrawer}
+                    width={{ base: "100%", md: "auto" }}
+                  >
+                    Seleccionar RRPP
+                  </Button>
+                )}
+              </Box>
+            )}
+
+            <Drawer
+              isOpen={isRRPPDrawerOpen}
+              placement="right"
+              onClose={closeRRPPDrawer}
+            >
+              <DrawerOverlay />
+              <DrawerContent>
+                <DrawerCloseButton />
+                <DrawerHeader>Seleccionar RRPP</DrawerHeader>
+                <DrawerBody>
+                  <List spacing={3}>
+                    {prList.map((pr) => (
+                      <ListItem
+                        key={pr.id}
+                        py={2}
+                        px={3}
+                        borderRadius="md"
+                        _hover={{ bg: "gray.100", cursor: "pointer" }}
+                        bg={selectedPR === pr.name ? "brand.100" : undefined}
+                        onClick={() => handleSelectPR(pr.name)}
+                      >
+                        {pr.name}
+                      </ListItem>
+                    ))}
+                  </List>
+                </DrawerBody>
+              </DrawerContent>
+            </Drawer>
 
             <Button
               size="lg"

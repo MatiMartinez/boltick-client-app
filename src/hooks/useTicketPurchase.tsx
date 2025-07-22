@@ -24,6 +24,19 @@ export default function useTicketPurchase() {
     Object.fromEntries(event.tickets.map((ticket) => [ticket.id, 0]))
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedPR, setSelectedPR] = useState<string>("");
+  const [isRRPPDrawerOpen, setRRPPDrawerOpen] = useState(false);
+
+  const openRRPPDrawer = () => setRRPPDrawerOpen(true);
+
+  const closeRRPPDrawer = () => setRRPPDrawerOpen(false);
+
+  const handleSelectPR = (prName: string) => {
+    setSelectedPR(prName);
+    setRRPPDrawerOpen(false);
+  };
+
+  const removeRRPP = () => setSelectedPR("");
 
   const handleQuantityChange = (ticketId: string, increment: boolean) => {
     setQuantities((prev) => {
@@ -73,6 +86,7 @@ export default function useTicketPurchase() {
         provider: "Mercado Pago",
         userId: userInfo.email,
         walletPublicKey: walletAddress,
+        prName: selectedPR,
       });
 
       window.location.href = newPayment.url;
@@ -109,5 +123,11 @@ export default function useTicketPurchase() {
     onPurchase,
     quantities,
     summary,
+    selectedPR,
+    openRRPPDrawer,
+    closeRRPPDrawer,
+    isRRPPDrawerOpen,
+    handleSelectPR,
+    removeRRPP,
   };
 }
