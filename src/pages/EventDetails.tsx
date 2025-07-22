@@ -119,7 +119,7 @@ export default function EventDetails() {
                   <Flex justify="space-between" align="center">
                     <Heading size="md">{ticket.name}</Heading>
                     <Text color="brand.400" fontSize="lg" fontWeight="bold">
-                      {formatARS(ticket.price)}
+                      {formatARS(ticket.priceWithoutTax)}
                     </Text>
                   </Flex>
                   <Text color="whiteAlpha.700">{ticket.description}</Text>
