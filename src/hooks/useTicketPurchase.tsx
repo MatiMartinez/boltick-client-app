@@ -98,7 +98,6 @@ export default function useTicketPurchase() {
           duration: 3000,
           isClosable: true,
         });
-        setIsLoading(false);
         return;
       }
 
@@ -112,7 +111,7 @@ export default function useTicketPurchase() {
         duration: 3000,
         isClosable: true,
       });
-
+    } finally {
       setIsLoading(false);
     }
   };
