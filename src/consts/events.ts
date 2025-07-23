@@ -14,6 +14,7 @@ export const events: Event[] = [
     edition: 1,
     image: "/wine-activity-1.webp",
     location: "Centro de congreso y exposiciones Francisco",
+    locationLink: "https://maps.app.goo.gl/y3SvdpuJysCQcZyv9",
     name: "Wine Activity",
     prs: [
       {

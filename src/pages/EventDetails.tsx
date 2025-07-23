@@ -82,7 +82,7 @@ export default function EventDetails() {
                 <HStack color="whiteAlpha.800">
                   <MapPin size={20} />
                   <Link
-                    href="https://maps.app.goo.gl/y3SvdpuJysCQcZyv9"
+                    href={event.locationLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ textDecoration: "underline" }}

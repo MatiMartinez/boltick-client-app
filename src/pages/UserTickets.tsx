@@ -24,6 +24,10 @@ import { QRCodeSVG } from "qrcode.react";
 
 import useUserTickets from "../hooks/useUserTickets";
 import { formatFullDate } from "../utils/date";
+import { events } from "../consts/events";
+import EventInfoModal from "../components/EventInfoModal";
+import { Info } from "lucide-react";
+import useEventInfoModal from "../hooks/useEventInfoModal";
 
 export default function UserTickets() {
   const {
@@ -35,6 +39,7 @@ export default function UserTickets() {
     onClose,
     handleShowQR,
   } = useUserTickets();
+  const eventInfoModal = useEventInfoModal();
 
   return (
     <Box py={[0, 20]}>
@@ -107,63 +112,79 @@ export default function UserTickets() {
             </VStack>
           ) : (
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={8}>
-              {tickets.map((ticket) => (
-                <Box
-                  key={ticket.createdAt}
-                  bg="gray.700"
-                  borderRadius="xl"
-                  overflow="hidden"
-                  transition="transform 0.2s"
-                  _hover={{ transform: "translateY(-4px)" }}
-                >
-                  <Image
-                    src={ticket.imageUrl}
-                    alt={ticket.assetId}
-                    h="300px"
-                    w="300px"
-                    objectFit="cover"
-                    objectPosition="center"
+              {tickets.map((ticket) => {
+                const event = events.find((e) => e.id === ticket.eventId);
+
+                return (
+                  <Box
+                    key={ticket.createdAt}
+                    bg="gray.700"
                     borderRadius="xl"
-                    borderBottomRadius="0"
-                    border="1px solid rgba(255,255,255,0.2)"
-                  />
-                  <VStack p={4} spacing={2} align="stretch">
-                    <Badge alignSelf="start" colorScheme="brand">
-                      {ticket.type}
-                    </Badge>
-                    <Heading size="md">
-                      {ticket.collectionSymbol} - {ticket.collectionName}
-                    </Heading>
-                    <Text fontSize="sm" color="whiteAlpha.600">
-                      ID de Entrada: {ticket.ticketNumber}
-                    </Text>
-                    {ticket.used === 1 ? (
-                      <Text color="green.300" fontWeight="bold">
-                        {ticket.useDate
-                          ? `Ingreso ${formatFullDate(ticket.useDate)}`
-                          : "Sin información de ingreso"}
+                    overflow="hidden"
+                    transition="transform 0.2s"
+                    _hover={{ transform: "translateY(-4px)" }}
+                  >
+                    <Image
+                      src={ticket.imageUrl}
+                      alt={ticket.assetId}
+                      h="300px"
+                      w="300px"
+                      objectFit="cover"
+                      objectPosition="center"
+                      borderRadius="xl"
+                      borderBottomRadius="0"
+                      border="1px solid rgba(255,255,255,0.2)"
+                    />
+                    <VStack p={4} spacing={2} align="stretch">
+                      <Badge alignSelf="start" colorScheme="brand">
+                        {ticket.type}
+                      </Badge>
+                      <Heading size="md">
+                        {ticket.collectionSymbol} - {ticket.collectionName}
+                      </Heading>
+                      <Text fontSize="sm" color="whiteAlpha.600">
+                        ID de Entrada: {ticket.ticketNumber}
                       </Text>
-                    ) : (
-                      // <Button
-                      //   leftIcon={<QrCode size={16} />}
-                      //   onClick={() => handleShowQR(ticket)}
-                      //   variant="outline"
-                      //   borderColor="brand.400"
-                      //   _hover={{ bg: "brand.500" }}
-                      // >
-                      //   Mostrar QR
-                      // </Button>
-                      <Text
-                        color="yellow.400"
-                        fontWeight="medium"
-                        fontSize="sm"
-                      >
-                        Tu QR se habilitará cerca de la fecha.
-                      </Text>
-                    )}
-                  </VStack>
-                </Box>
-              ))}
+                      {ticket.used === 1 ? (
+                        <Text color="green.300" fontWeight="bold">
+                          {ticket.useDate
+                            ? `Ingreso ${formatFullDate(ticket.useDate)}`
+                            : "Sin información de ingreso"}
+                        </Text>
+                      ) : (
+                        // <Button
+                        //   leftIcon={<QrCode size={16} />}
+                        //   onClick={() => handleShowQR(ticket)}
+                        //   variant="outline"
+                        //   borderColor="brand.400"
+                        //   _hover={{ bg: "brand.500" }}
+                        // >
+                        //   Mostrar QR
+                        // </Button>
+                        <Text
+                          color="yellow.400"
+                          fontWeight="medium"
+                          fontSize="sm"
+                        >
+                          Tu QR se habilitará cerca de la fecha.
+                        </Text>
+                      )}
+
+                      {event && (
+                        <Button
+                          mt={1}
+                          leftIcon={<Info size={16} />}
+                          onClick={() => eventInfoModal.open(event)}
+                          variant="outline"
+                          colorScheme="brand"
+                        >
+                          Ver Evento
+                        </Button>
+                      )}
+                    </VStack>
+                  </Box>
+                );
+              })}
             </SimpleGrid>
           )}
         </VStack>
@@ -206,6 +227,12 @@ export default function UserTickets() {
           </ModalBody>
         </ModalContent>
       </Modal>
+
+      <EventInfoModal
+        isOpen={eventInfoModal.isOpen}
+        onClose={eventInfoModal.close}
+        event={eventInfoModal.selectedEvent}
+      />
     </Box>
   );
 }
