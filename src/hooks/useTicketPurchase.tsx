@@ -111,10 +111,10 @@ export default function useTicketPurchase() {
       .map((ticket) => ({
         collectionName: event.collectionName,
         collectionSymbol: event.collectionSymbol,
+        imageUrl: ticket.imageUrl,
         quantity: quantities[ticket.id],
         type: ticket.name,
         unitPrice: ticket.price,
-        imageUrl: ticket.imageUrl,
       }));
   };
 

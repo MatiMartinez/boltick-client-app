@@ -290,7 +290,7 @@ export default function EventDetails() {
                         py={2}
                         px={3}
                         borderRadius="md"
-                        _hover={{ bg: "gray.100", cursor: "pointer" }}
+                        _hover={{ bg: "gray.600", cursor: "pointer" }}
                         bg={selectedPR === pr.name ? "brand.100" : undefined}
                         onClick={() => handleSelectPR(pr.name)}
                       >
