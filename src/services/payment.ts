@@ -5,7 +5,7 @@ const PAYMENT_ENDPOINT = "/payments";
 
 export const paymentService = {
   async createPayment(input: CreatePayment) {
-    const response = await httpInstance.post<{ url: string }>(
+    const response = await httpInstance.post<CreatePaymentOutput>(
       `${PAYMENT_ENDPOINT}/create-payment-link`,
       input
     );
@@ -27,6 +27,14 @@ type CreatePayment = Pick<
 > & {
   nfts: NFTDTO[];
 };
+
+export interface CreatePaymentOutput {
+  success: number;
+  message: string;
+  data?: {
+    url: string;
+  };
+}
 
 export type NFTDTO = Pick<
   NFT,

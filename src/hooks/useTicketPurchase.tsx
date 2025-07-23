@@ -90,7 +90,19 @@ export default function useTicketPurchase() {
         walletPublicKey: walletAddress,
       });
 
-      window.location.href = newPayment.url;
+      if (newPayment.success === 0 || !newPayment.data) {
+        toast({
+          title: "Error en la compra",
+          description: newPayment.message,
+          status: "warning",
+          duration: 3000,
+          isClosable: true,
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      window.location.href = newPayment.data.url;
     } catch (error) {
       toast({
         title: "Error en la compra",
