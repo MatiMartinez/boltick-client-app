@@ -37,8 +37,8 @@ export default function PaymentSuccess() {
             Tu compra ha sido procesada correctamente.
           </Text>
           <Text color="yellow.300" fontSize="md">
-            Recuerda: tus tickets NFT pueden demorar unos minutos en aparecer en
-            tu billetera.
+            Recuerda: tus tickets pueden demorar unos minutos en aparecer en tu
+            billetera.
           </Text>
           {isConnected ? (
             <>
