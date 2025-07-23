@@ -126,14 +126,14 @@ export const events: Event[] = [
     tickets: [
       {
         id: "d98c69a9-79f7-432c-a4f2-5e1e4bbd2cf5",
-        name: "General",
         description: "Copa de degustación + Entrada",
-        // price: 17250,
-        // tax: 2250,
-        // priceWithoutTax: 15000,
-        price: 172.5,
-        tax: 22.5,
-        priceWithoutTax: 150.0,
+        name: "General",
+        price: 17250,
+        priceWithoutTax: 15000,
+        tax: 2250,
+        // price: 172.5,
+        // priceWithoutTax: 150.0,
+        // tax: 22.5,
         imageUrl:
           "https://d1ohydrg88i5oe.cloudfront.net/nft-images/wine-activity-1.png",
       },
