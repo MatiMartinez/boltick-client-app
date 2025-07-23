@@ -82,11 +82,12 @@ export default function useTicketPurchase() {
 
       const newPayment = await paymentService.createPayment({
         eventId: event.id,
+        eventName: event.name,
         nfts: nfts,
+        prName: selectedPR,
         provider: "Mercado Pago",
         userId: userInfo.email,
         walletPublicKey: walletAddress,
-        prName: selectedPR,
       });
 
       window.location.href = newPayment.url;
@@ -113,6 +114,7 @@ export default function useTicketPurchase() {
         quantity: quantities[ticket.id],
         type: ticket.name,
         unitPrice: ticket.price,
+        imageUrl: ticket.imageUrl,
       }));
   };
 

@@ -33,6 +33,7 @@ interface PR {
 interface Ticket {
   id: string;
   description: string;
+  imageUrl: string;
   name: string;
   price: number;
   priceWithoutTax: number;

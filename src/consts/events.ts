@@ -134,6 +134,8 @@ export const events: Event[] = [
         price: 172.5,
         tax: 22.5,
         priceWithoutTax: 150.0,
+        imageUrl:
+          "https://d1ohydrg88i5oe.cloudfront.net/nft-images/wine-activity-1.png",
       },
     ],
     time: "19:00 hs - 02:00 hs",
