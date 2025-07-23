@@ -11,6 +11,7 @@ export interface Event {
   image: string;
   location: string;
   name: string;
+  prs: PR[];
   tickets: Ticket[];
   time: string;
 }
@@ -18,6 +19,14 @@ export interface Event {
 interface Artist {
   description: string;
   name: string;
+}
+
+interface PR {
+  id: string;
+  email: string;
+  name: string;
+  phone: string;
+  photo: string;
 }
 
 interface Ticket {

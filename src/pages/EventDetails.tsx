@@ -23,7 +23,6 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Calendar, MapPin, Users, Clock, Plus, Minus } from "lucide-react";
-import { prList } from "../consts/prList";
 
 import useTicketPurchase from "../hooks/useTicketPurchase";
 import { formatARS } from "../utils/currency";
@@ -285,7 +284,7 @@ export default function EventDetails() {
                 <DrawerHeader>Seleccionar RRPP</DrawerHeader>
                 <DrawerBody>
                   <List spacing={3}>
-                    {prList.map((pr) => (
+                    {event.prs.map((pr) => (
                       <ListItem
                         key={pr.id}
                         py={2}

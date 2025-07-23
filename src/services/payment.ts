@@ -23,14 +23,14 @@ export const paymentService = {
 
 type CreatePayment = Pick<
   Payment,
-  "userId" | "eventId" | "walletPublicKey" | "provider" | "prName"
+  "userId" | "eventId" | "eventName" | "walletPublicKey" | "provider" | "prName"
 > & {
   nfts: NFTDTO[];
 };
 
 export type NFTDTO = Pick<
   NFT,
-  "collectionName" | "collectionSymbol" | "type" | "unitPrice"
+  "collectionName" | "collectionSymbol" | "imageUrl" | "type" | "unitPrice"
 > & { quantity: number };
 
 interface UpdatePayment {

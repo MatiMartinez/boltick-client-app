@@ -117,13 +117,15 @@ export default function UserTickets() {
                   _hover={{ transform: "translateY(-4px)" }}
                 >
                   <Image
-                    // src={ticket.imageUrl}
-                    src="https://i.ibb.co/4wT8FL1q/Untitled-design-2.png"
+                    src={ticket.imageUrl}
                     alt={ticket.assetId}
                     h="300px"
-                    w="full"
+                    w="300px"
                     objectFit="cover"
                     objectPosition="center"
+                    borderRadius="xl"
+                    borderBottomRadius="0"
+                    border="1px solid rgba(255,255,255,0.2)"
                   />
                   <VStack p={4} spacing={2} align="stretch">
                     <Badge alignSelf="start" colorScheme="brand">
