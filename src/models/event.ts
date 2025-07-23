@@ -34,6 +34,6 @@ interface Ticket {
   description: string;
   name: string;
   price: number;
-  tax: number;
   priceWithoutTax: number;
+  tax: number;
 }

@@ -12,9 +12,11 @@ import {
 import { CheckCircle } from "lucide-react";
 
 import useUpdatePayment from "../../hooks/useUpdatePayment";
+import useSession from "../../hooks/useSession";
 
 export default function PaymentSuccess() {
   const { isLoading } = useUpdatePayment();
+  const { isConnected } = useSession();
 
   if (isLoading) {
     return (
@@ -28,13 +30,32 @@ export default function PaymentSuccess() {
   return (
     <Box py={20}>
       <Container maxW="container.md">
-        <VStack spacing={8} textAlign="center">
+        <VStack spacing={6} textAlign="center">
           <Icon as={CheckCircle} boxSize={16} color="green.400" />
           <Heading size="xl">¡Pago Exitoso!</Heading>
           <Text color="whiteAlpha.800" fontSize="lg">
-            Tu compra ha sido procesada correctamente. Los tickets NFT serán
-            transferidos a tu billetera pronto.
+            Tu compra ha sido procesada correctamente.
           </Text>
+          <Text color="yellow.300" fontSize="md">
+            Recuerda: tus tickets NFT pueden demorar unos minutos en aparecer en
+            tu billetera.
+          </Text>
+          {isConnected ? (
+            <>
+              <Text color="whiteAlpha.800" fontSize="md">
+                Puedes ver y gestionar tus tickets en la sección "Mis Tickets".
+              </Text>
+              <Button
+                as={RouterLink}
+                to="/tickets"
+                size="lg"
+                bgGradient="linear(to-r, brand.500, purple.500)"
+                _hover={{ bgGradient: "linear(to-r, brand.600, purple.600)" }}
+              >
+                Ir a Mis Tickets
+              </Button>
+            </>
+          ) : null}
           <Button
             as={RouterLink}
             to="/"

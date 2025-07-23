@@ -9,6 +9,7 @@ import {
   Image,
   Badge,
   Button,
+  IconButton,
   Flex,
   Modal,
   ModalOverlay,
@@ -52,16 +53,15 @@ export default function UserTickets() {
                 Gestiona tus tickets a eventos
               </Text>
             </VStack>
-            <Button
-              leftIcon={<RefreshCw size={20} />}
+            <IconButton
+              aria-label="Actualizar tickets"
+              icon={<RefreshCw size={20} />}
               onClick={refreshTickets}
               isLoading={isLoading}
-              loadingText="Actualizando"
               variant="outline"
               borderColor="brand.400"
-            >
-              Actualizar
-            </Button>
+              size="md"
+            />
           </Flex>
 
           {tickets.length === 0 && !isLoading ? (
