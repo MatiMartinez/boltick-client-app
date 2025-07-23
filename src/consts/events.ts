@@ -127,7 +127,7 @@ export const events: Event[] = [
       {
         id: "d98c69a9-79f7-432c-a4f2-5e1e4bbd2cf5",
         name: "General",
-        description: "Incluye copa de vino",
+        description: "Copa de degustación + Entrada",
         // price: 17250,
         // tax: 2250,
         // priceWithoutTax: 15000,
