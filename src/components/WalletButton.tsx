@@ -39,7 +39,7 @@ export default function WalletButton() {
           bgGradient: "linear(to-r, brand.600, purple.600)",
         }}
       >
-        Conectar
+        Iniciar sesión
       </Button>
     );
   }

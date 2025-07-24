@@ -66,8 +66,8 @@ export default function useTicketPurchase() {
   const onPurchase = async () => {
     if (!isConnected || !userInfo?.email) {
       toast({
-        title: "Conecta tu billetera",
-        description: "Necesitas conectar tu billetera para comprar entradas",
+        title: "Iniciá sesión",
+        description: "Necesitás iniciar sesión para continuar con tu compra.",
         status: "warning",
         duration: 3000,
         isClosable: true,
