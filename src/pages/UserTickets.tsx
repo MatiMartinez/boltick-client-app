@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Box,
   Container,
@@ -17,28 +16,20 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { QrCode, RefreshCw } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 
 import useUserTickets from "../hooks/useUserTickets";
-import { formatFullDate } from "../utils/date";
+import { formatFullDate, formatTime } from "../utils/date";
 import { events } from "../consts/events";
 import EventInfoModal from "../components/EventInfoModal";
 import { Info } from "lucide-react";
 import useEventInfoModal from "../hooks/useEventInfoModal";
 
 export default function UserTickets() {
-  const {
-    tickets,
-    isLoading,
-    refreshTickets,
-    selectedTicket,
-    isOpen,
-    onClose,
-    handleShowQR,
-  } = useUserTickets();
+  const { tickets, isLoading, refreshTickets, selectedTicket, isOpen, onClose, handleShowQR, qrToken, timeLeft, generatingTicketId } =
+    useUserTickets();
   const eventInfoModal = useEventInfoModal();
 
   return (
@@ -47,11 +38,7 @@ export default function UserTickets() {
         <VStack spacing={12}>
           <Flex width="100%" justify="space-between" align="flex-start">
             <VStack spacing={4} align="start">
-              <Heading
-                size="2xl"
-                bgGradient="linear(to-r, white, whiteAlpha.800)"
-                bgClip="text"
-              >
+              <Heading size="2xl" bgGradient="linear(to-r, white, whiteAlpha.800)" bgClip="text">
                 Mis Tickets
               </Heading>
               <Text color="whiteAlpha.800" fontSize="lg">
@@ -71,25 +58,14 @@ export default function UserTickets() {
 
           {tickets.length === 0 && !isLoading ? (
             <VStack spacing={6} py={16} w="full">
-              <Box
-                fontSize="64px"
-                color="brand.400"
-                as="span"
-                aria-label="Ticket icon"
-              >
+              <Box fontSize="64px" color="brand.400" as="span" aria-label="Ticket icon">
                 🎫
               </Box>
               <Heading size="lg" color="whiteAlpha.900" textAlign="center">
                 Aún no tienes tickets comprados.
               </Heading>
-              <Text
-                color="whiteAlpha.700"
-                fontSize="md"
-                textAlign="center"
-                maxW="md"
-              >
-                ¡No te pierdas la oportunidad de vivir una experiencia única!
-                Explora los eventos disponibles y adquiere tus tickets
+              <Text color="whiteAlpha.700" fontSize="md" textAlign="center" maxW="md">
+                ¡No te pierdas la oportunidad de vivir una experiencia única! Explora los eventos disponibles y adquiere tus tickets
                 fácilmente.
               </Text>
               <Button
@@ -147,27 +123,20 @@ export default function UserTickets() {
                       </Text>
                       {ticket.used === 1 ? (
                         <Text color="green.300" fontWeight="bold">
-                          {ticket.useDate
-                            ? `Ingreso ${formatFullDate(ticket.useDate)}`
-                            : "Sin información de ingreso"}
+                          {ticket.useDate ? `Ingreso ${formatFullDate(ticket.useDate)}` : "Sin información de ingreso"}
                         </Text>
                       ) : (
-                        // <Button
-                        //   leftIcon={<QrCode size={16} />}
-                        //   onClick={() => handleShowQR(ticket)}
-                        //   variant="outline"
-                        //   borderColor="brand.400"
-                        //   _hover={{ bg: "brand.500" }}
-                        // >
-                        //   Mostrar QR
-                        // </Button>
-                        <Text
-                          color="yellow.400"
-                          fontWeight="medium"
-                          fontSize="sm"
+                        <Button
+                          leftIcon={<QrCode size={16} />}
+                          onClick={() => handleShowQR(ticket)}
+                          variant="outline"
+                          borderColor="brand.400"
+                          _hover={{ bg: "brand.500" }}
+                          isLoading={generatingTicketId === ticket.ticketNumber}
+                          loadingText="Generando..."
                         >
-                          Tu QR se habilitará cerca de la fecha.
-                        </Text>
+                          Mostrar QR
+                        </Button>
                       )}
 
                       {event && (
@@ -197,30 +166,44 @@ export default function UserTickets() {
           <ModalCloseButton />
           <ModalBody>
             <VStack spacing={6} py={6}>
-              <Box
-                bg="white"
-                p={4}
-                borderRadius="xl"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <QRCodeSVG
-                  value="https://google.com"
-                  size={200}
-                  level="H"
-                  includeMargin
-                />
-              </Box>
-              {selectedTicket && (
-                <VStack spacing={2} align="center">
-                  <Text fontWeight="bold">
-                    {selectedTicket.collectionSymbol} -{" "}
-                    {selectedTicket.collectionName}
-                  </Text>
-                  <Text fontSize="sm" color="whiteAlpha.700">
-                    ID: {selectedTicket.ticketNumber}
-                  </Text>
+              {qrToken ? (
+                <>
+                  <Box bg="white" p={4} borderRadius="xl" display="flex" justifyContent="center" alignItems="center">
+                    <QRCodeSVG value={qrToken} size={200} level="H" includeMargin />
+                  </Box>
+
+                  <VStack spacing={2}>
+                    <Text fontSize="sm" color="whiteAlpha.700">
+                      Tiempo restante: {formatTime(timeLeft)}
+                    </Text>
+                    <Box w="200px" h="2px" bg="gray.600" borderRadius="full">
+                      <Box
+                        h="100%"
+                        bg={timeLeft <= 10 ? "red.400" : "brand.400"}
+                        borderRadius="full"
+                        width={`${(timeLeft / 30) * 100}%`}
+                        transition="all 0.3s ease"
+                      />
+                    </Box>
+                  </VStack>
+
+                  {selectedTicket && (
+                    <VStack spacing={2} align="center">
+                      <Text fontWeight="bold">
+                        {selectedTicket.collectionSymbol} - {selectedTicket.collectionName}
+                      </Text>
+                      <Text fontSize="sm" color="whiteAlpha.700">
+                        ID: {selectedTicket.ticketNumber}
+                      </Text>
+                    </VStack>
+                  )}
+                </>
+              ) : (
+                <VStack spacing={4}>
+                  <Text>Generando código QR...</Text>
+                  <Box w={200} h={200} bg="gray.600" borderRadius="xl" display="flex" alignItems="center" justifyContent="center">
+                    <Text color="whiteAlpha.600">Cargando...</Text>
+                  </Box>
                 </VStack>
               )}
             </VStack>
@@ -228,11 +211,7 @@ export default function UserTickets() {
         </ModalContent>
       </Modal>
 
-      <EventInfoModal
-        isOpen={eventInfoModal.isOpen}
-        onClose={eventInfoModal.close}
-        event={eventInfoModal.selectedEvent}
-      />
+      <EventInfoModal isOpen={eventInfoModal.isOpen} onClose={eventInfoModal.close} event={eventInfoModal.selectedEvent} />
     </Box>
   );
 }

@@ -7,3 +7,9 @@ export function formatFullDate(timestamp: number): string | null {
   const minutos = date.getMinutes().toString().padStart(2, "0");
   return `${dia}/${mes}/${anio}, ${hora}:${minutos} hs`;
 }
+
+export function formatTime(seconds: number): string {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+}

@@ -21,7 +21,8 @@ const useUpdatePayment = () => {
     const doUpdate = async () => {
       setIsLoading(true);
       try {
-        await updatePayment(external_reference, status as Status);
+        const formattedStatus = formatStatus(status);
+        await updatePayment(external_reference, formattedStatus);
       } finally {
         setIsLoading(false);
       }
@@ -31,6 +32,19 @@ const useUpdatePayment = () => {
 
   const updatePayment = async (id: string, status: Status) => {
     await paymentService.updatePayment({ id: id, callbackStatus: status });
+  };
+
+  const formatStatus = (status: string): Status => {
+    switch (status) {
+      case "pending":
+        return "Pending";
+      case "approved":
+        return "Approved";
+      case "rejected":
+        return "Rejected";
+      default:
+        return "Pending";
+    }
   };
 
   return { isLoading };

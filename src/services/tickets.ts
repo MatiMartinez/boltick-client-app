@@ -1,13 +1,24 @@
 import { Ticket } from "../models/ticket";
 import httpInstance from "./httpInstance";
 
-const PAYMENT_ENDPOINT = "/tickets";
+const TICKETS_ENDPOINT = "/tickets";
 
 export const ticketService = {
   async getTickets(input: string) {
-    const response = await httpInstance.get<{ tickets: Ticket[] }>(
-      `${PAYMENT_ENDPOINT}/get-tickets/${input}`
-    );
+    const response = await httpInstance.get<{ tickets: Ticket[] }>(`${TICKETS_ENDPOINT}/get-tickets/${input}`);
+    return response.data;
+  },
+
+  async generateEntry(input: string) {
+    const response = await httpInstance.post<GenerateEntryOutput>(`${TICKETS_ENDPOINT}/generate-entry`, { ticketNumber: input });
     return response.data;
   },
 };
+
+export interface GenerateEntryOutput {
+  success: number;
+  message: string;
+  data?: {
+    token: string;
+  };
+}
