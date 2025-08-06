@@ -49,13 +49,7 @@ export default function EventDetails() {
         <Grid templateColumns={{ base: "1fr", lg: "3fr 2fr" }} gap={12}>
           {/* Left Column - Event Details */}
           <VStack align="stretch" spacing={8}>
-            <Image
-              src={event.image}
-              alt={event.name}
-              borderRadius="2xl"
-              objectFit="cover"
-              h={{ base: "200px", md: "350px" }}
-            />
+            <Image src={event.image} alt={event.name} borderRadius="2xl" objectFit="cover" h={{ base: "200px", md: "350px" }} />
 
             <VStack align="stretch" spacing={{ base: 4, md: 6 }}>
               <Heading size="2xl">{event.name}</Heading>
@@ -67,10 +61,7 @@ export default function EventDetails() {
                 <Text color="whiteAlpha.700">Evento #{event.edition}</Text>
               </HStack>
 
-              <Grid
-                templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }}
-                gap={{ base: 2, md: 6 }}
-              >
+              <Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={{ base: 2, md: 6 }}>
                 <HStack color="whiteAlpha.800">
                   <Calendar size={20} />
                   <Text>{event.date}</Text>
@@ -81,12 +72,7 @@ export default function EventDetails() {
                 </HStack>
                 <HStack color="whiteAlpha.800">
                   <MapPin size={20} />
-                  <Link
-                    href={event.locationLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ textDecoration: "underline" }}
-                  >
+                  <Link href={event.locationLink} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline" }}>
                     <Text>{event.location}</Text>
                   </Link>
                 </HStack>
@@ -96,11 +82,7 @@ export default function EventDetails() {
 
               <VStack align="stretch" spacing={{ base: 2, md: 4 }}>
                 <Heading size="md">Sobre este Evento</Heading>
-                <Text
-                  color="whiteAlpha.800"
-                  lineHeight="tall"
-                  whiteSpace="pre-line"
-                >
+                <Text color="whiteAlpha.800" lineHeight="tall" whiteSpace="pre-line">
                   {event.description}
                 </Text>
               </VStack>
@@ -150,12 +132,7 @@ export default function EventDetails() {
                         variant="outline"
                         size="sm"
                       />
-                      <Text
-                        w="40px"
-                        textAlign="center"
-                        fontSize="lg"
-                        fontWeight="medium"
-                      >
+                      <Text w="40px" textAlign="center" fontSize="lg" fontWeight="medium">
                         {quantities[ticket.id]}
                       </Text>
                       <IconButton
@@ -173,13 +150,7 @@ export default function EventDetails() {
             ))}
 
             {summary.selectedTickets.length > 0 && (
-              <VStack
-                align="stretch"
-                bg="gray.600"
-                p={6}
-                borderRadius="xl"
-                spacing={4}
-              >
+              <VStack align="stretch" bg="gray.600" p={6} borderRadius="xl" spacing={4}>
                 <Heading size="md">Resumen</Heading>
                 {summary.selectedTickets.map((tier) => (
                   <Box key={tier.id}>
@@ -187,27 +158,13 @@ export default function EventDetails() {
                       <Text>
                         {quantities[tier.id]}x {tier.name}
                       </Text>
-                      <Text fontWeight="bold">
-                        {formatARS(tier.price * quantities[tier.id])}
-                      </Text>
+                      <Text fontWeight="bold">{formatARS(tier.price * quantities[tier.id])}</Text>
                     </Flex>
-                    <Flex
-                      justify="space-between"
-                      fontSize="sm"
-                      color="whiteAlpha.700"
-                      pl={4}
-                    >
+                    <Flex justify="space-between" fontSize="sm" color="whiteAlpha.700" pl={4}>
                       <Text>Subtotal</Text>
-                      <Text>
-                        {formatARS(tier.priceWithoutTax * quantities[tier.id])}
-                      </Text>
+                      <Text>{formatARS(tier.priceWithoutTax * quantities[tier.id])}</Text>
                     </Flex>
-                    <Flex
-                      justify="space-between"
-                      fontSize="sm"
-                      color="whiteAlpha.700"
-                      pl={4}
-                    >
+                    <Flex justify="space-between" fontSize="sm" color="whiteAlpha.700" pl={4}>
                       <Text>Cargo por servicio</Text>
                       <Text>{formatARS(tier.tax * quantities[tier.id])}</Text>
                     </Flex>
@@ -241,43 +198,22 @@ export default function EventDetails() {
                 </Text>
                 {selectedPR ? (
                   <Flex justifyContent="space-between" align="center" gap={3}>
-                    <Badge
-                      colorScheme="brand"
-                      fontSize="md"
-                      px={3}
-                      py={1}
-                      borderRadius="md"
-                    >
+                    <Badge colorScheme="brand" fontSize="md" px={3} py={1} borderRadius="md">
                       {selectedPR}
                     </Badge>
-                    <Button
-                      size="xs"
-                      variant="ghost"
-                      colorScheme="red"
-                      onClick={removeRRPP}
-                    >
+                    <Button size="xs" variant="ghost" colorScheme="red" onClick={removeRRPP}>
                       Remover selección
                     </Button>
                   </Flex>
                 ) : (
-                  <Button
-                    size="md"
-                    colorScheme="brand"
-                    variant="outline"
-                    onClick={openRRPPDrawer}
-                    width={{ base: "100%", md: "auto" }}
-                  >
+                  <Button size="md" colorScheme="brand" variant="outline" onClick={openRRPPDrawer} width={{ base: "100%", md: "auto" }}>
                     Seleccionar RRPP
                   </Button>
                 )}
               </Box>
             )}
 
-            <Drawer
-              isOpen={isRRPPDrawerOpen}
-              placement="right"
-              onClose={closeRRPPDrawer}
-            >
+            <Drawer isOpen={isRRPPDrawerOpen} placement="right" onClose={closeRRPPDrawer}>
               <DrawerOverlay />
               <DrawerContent>
                 <DrawerCloseButton />
@@ -316,10 +252,17 @@ export default function EventDetails() {
               loadingText="Procesando compra..."
               onClick={onPurchase}
             >
-              {summary.selectedTickets.length === 0
-                ? "Selecciona tus entradas"
-                : `Comprar • ${formatARS(summary.total)}`}
+              {summary.selectedTickets.length === 0 ? "Selecciona tus entradas" : `Comprar • ${formatARS(summary.total)}`}
             </Button>
+
+            {summary.selectedTickets.length > 0 && (
+              <HStack justify="center" py={1}>
+                <Text fontSize="md" color="whiteAlpha.600">
+                  Pago seguro con
+                </Text>
+                <Image src="/logo-mercadopago-white.png" alt="MercadoPago" h="50px" objectFit="contain" />
+              </HStack>
+            )}
           </VStack>
         </Grid>
       </Container>

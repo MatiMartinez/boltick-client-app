@@ -1,15 +1,4 @@
-import {
-  Box,
-  Container,
-  Grid,
-  Heading,
-  Image,
-  Text,
-  VStack,
-  Badge,
-  HStack,
-  Button,
-} from "@chakra-ui/react";
+import { Box, Container, Grid, Heading, Image, Text, VStack, Badge, HStack, Button } from "@chakra-ui/react";
 import { Calendar, MapPin } from "lucide-react";
 import { Link as RouterLink } from "react-router-dom";
 
@@ -17,14 +6,10 @@ import { events } from "../consts/events";
 
 export default function EventList() {
   return (
-    <Box py={20} bg="gray.800" id="events-section">
+    <Box py={{ base: 12, md: 20 }} bg="gray.800" id="events-section">
       <Container maxW="container.xl">
-        <VStack spacing={16}>
-          <Heading
-            bgGradient="linear(to-r, white, whiteAlpha.800)"
-            bgClip="text"
-            letterSpacing="tight"
-          >
+        <VStack spacing={{ base: 8, md: 16 }}>
+          <Heading size={{ base: "lg", md: "xl" }} bgGradient="linear(to-r, white, whiteAlpha.800)" bgClip="text" letterSpacing="tight">
             Próximos Eventos
           </Heading>
 
@@ -34,7 +19,7 @@ export default function EventList() {
               md: "repeat(2, 1fr)",
               lg: "repeat(4, 1fr)",
             }}
-            gap={8}
+            gap={{ base: 4, md: 8 }}
           >
             {events.map((event) => (
               <Box
@@ -53,7 +38,7 @@ export default function EventList() {
               >
                 <Box
                   w="100%"
-                  aspectRatio={4 / 5}
+                  aspectRatio={{ base: 3 / 4, md: 4 / 5 }}
                   overflow="hidden"
                   borderRadius="xl"
                   bg="gray.700"
@@ -61,18 +46,12 @@ export default function EventList() {
                   alignItems="center"
                   justifyContent="center"
                 >
-                  <Image
-                    src={event.image}
-                    alt={event.name}
-                    w="100%"
-                    h="100%"
-                    objectFit="contain"
-                  />
+                  <Image src={event.image} alt={event.name} w="100%" h="100%" objectFit="contain" />
                 </Box>
-                <VStack p={6} align="stretch" spacing={2} flex={1}>
+                <VStack p={{ base: 4, md: 6 }} align="stretch" spacing={{ base: 1, md: 2 }} flex={1}>
                   <Badge
                     alignSelf="flex-start"
-                    px={3}
+                    px={{ base: 2, md: 3 }}
                     py={0.5}
                     borderRadius="full"
                     bg="brand.500"
@@ -81,17 +60,17 @@ export default function EventList() {
                   >
                     {event.category}
                   </Badge>
-                  <Heading size="md" letterSpacing="tight" mt={1}>
+                  <Heading size={{ base: "sm", md: "md" }} letterSpacing="tight" mt={1}>
                     {event.name}
                   </Heading>
 
-                  <VStack align="stretch" spacing={2} flex={1} mt={1}>
-                    <HStack color="whiteAlpha.700" fontSize="sm">
-                      <Calendar size={16} />
+                  <VStack align="stretch" spacing={{ base: 1, md: 2 }} flex={1} mt={1}>
+                    <HStack color="whiteAlpha.700" fontSize={{ base: "xs", md: "sm" }}>
+                      <Calendar size={14} />
                       <Text>{event.date}</Text>
                     </HStack>
-                    <HStack color="whiteAlpha.700" fontSize="sm">
-                      <MapPin size={16} />
+                    <HStack color="whiteAlpha.700" fontSize={{ base: "xs", md: "sm" }}>
+                      <MapPin size={14} />
                       <Text>{event.location}</Text>
                     </HStack>
                   </VStack>
@@ -99,14 +78,14 @@ export default function EventList() {
                   <Button
                     as={RouterLink}
                     to={`/event/${event.id}`}
-                    size="lg"
-                    fontSize="md"
+                    size={{ base: "md", md: "lg" }}
+                    fontSize={{ base: "sm", md: "md" }}
                     bgGradient="linear(to-r, brand.500, purple.500)"
                     _hover={{
                       bgGradient: "linear(to-r, brand.600, purple.600)",
                     }}
                     color="whiteAlpha.900"
-                    mt={2}
+                    mt={{ base: 2, md: 2 }}
                   >
                     Ir a comprar
                   </Button>
