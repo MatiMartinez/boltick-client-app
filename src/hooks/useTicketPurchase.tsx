@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useMemo, useEffect } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 
 import useSession from "./useSession";
@@ -9,6 +9,7 @@ import { NFTDTO, paymentService } from "../services/payment";
 
 export default function useTicketPurchase() {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const event = events.find((event) => event.id === id) as unknown as Event;
@@ -20,12 +21,26 @@ export default function useTicketPurchase() {
   const toast = useToast();
   const { isConnected, walletAddress, userInfo } = useSession();
 
-  const [quantities, setQuantities] = useState<Record<string, number>>(
-    Object.fromEntries(event.tickets.map((ticket) => [ticket.id, 0]))
-  );
+  const [quantities, setQuantities] = useState<Record<string, number>>(Object.fromEntries(event.tickets.map((ticket) => [ticket.id, 0])));
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedPR, setSelectedPR] = useState<string>("");
+  const [selectedPR, setSelectedPR] = useState<string>(() => {
+    return sessionStorage.getItem(`selectedPR_${event.id}`) || "";
+  });
   const [isRRPPDrawerOpen, setRRPPDrawerOpen] = useState(false);
+
+  useEffect(() => {
+    const prParam = searchParams.get("rrpp");
+    if (prParam && event?.prs) {
+      const foundPR = event.prs.find((pr) => pr.slug === prParam.toLowerCase());
+
+      if (foundPR) {
+        if (!selectedPR) {
+          setSelectedPR(foundPR.name);
+          sessionStorage.setItem(`selectedPR_${event.id}`, foundPR.name);
+        }
+      }
+    }
+  }, [searchParams, event?.prs, event.id]);
 
   const openRRPPDrawer = () => setRRPPDrawerOpen(true);
 
@@ -36,7 +51,10 @@ export default function useTicketPurchase() {
     setRRPPDrawerOpen(false);
   };
 
-  const removeRRPP = () => setSelectedPR("");
+  const removeRRPP = () => {
+    setSelectedPR("");
+    sessionStorage.removeItem(`selectedPR_${event.id}`);
+  };
 
   const handleQuantityChange = (ticketId: string, increment: boolean) => {
     setQuantities((prev) => {
@@ -53,13 +71,8 @@ export default function useTicketPurchase() {
   };
 
   const summary = useMemo(() => {
-    const selectedTickets = event.tickets.filter(
-      (ticket) => quantities[ticket.id] > 0
-    );
-    const total = selectedTickets.reduce(
-      (sum, ticket) => sum + ticket.price * quantities[ticket.id],
-      0
-    );
+    const selectedTickets = event.tickets.filter((ticket) => quantities[ticket.id] > 0);
+    const total = selectedTickets.reduce((sum, ticket) => sum + ticket.price * quantities[ticket.id], 0);
     return { selectedTickets, total };
   }, [quantities, event.tickets]);
 
@@ -105,8 +118,7 @@ export default function useTicketPurchase() {
     } catch (error) {
       toast({
         title: "Error en la compra",
-        description:
-          error instanceof Error ? error.message : "Ha ocurrido un error",
+        description: error instanceof Error ? error.message : "Ha ocurrido un error",
         status: "error",
         duration: 3000,
         isClosable: true,

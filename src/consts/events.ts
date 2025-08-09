@@ -23,6 +23,7 @@ export const events: Event[] = [
         email: "agustinachini26@gmail.com",
         phone: "",
         photo: "",
+        slug: "agustina-chini",
       },
       {
         id: "1",
@@ -30,6 +31,7 @@ export const events: Event[] = [
         email: "Anapaulacastillo2323@gmail.com",
         phone: "",
         photo: "",
+        slug: "ana-paula-castillo",
       },
       {
         id: "16",
@@ -37,6 +39,7 @@ export const events: Event[] = [
         email: "ailinrobles2@gmail.com",
         phone: "",
         photo: "",
+        slug: "ailen-robles",
       },
       {
         id: "8",
@@ -44,6 +47,7 @@ export const events: Event[] = [
         email: "Onofrichiarii@gmail.com",
         phone: "",
         photo: "",
+        slug: "chiara-onofri",
       },
       {
         id: "15",
@@ -51,6 +55,7 @@ export const events: Event[] = [
         email: "canndelamorello@gmail.com",
         phone: "",
         photo: "",
+        slug: "candela-morello",
       },
       {
         id: "19",
@@ -58,6 +63,7 @@ export const events: Event[] = [
         email: "cabreraevelin88@gmail.com",
         phone: "",
         photo: "",
+        slug: "evelin-cabrera",
       },
       {
         id: "2",
@@ -65,6 +71,7 @@ export const events: Event[] = [
         email: "emiliasuarez818@gmail.com",
         phone: "",
         photo: "",
+        slug: "emilia-suarez",
       },
       {
         id: "4",
@@ -72,6 +79,7 @@ export const events: Event[] = [
         email: "pezuttifranco@gmail.com",
         phone: "",
         photo: "",
+        slug: "franco-pezutti",
       },
       {
         id: "20",
@@ -79,6 +87,7 @@ export const events: Event[] = [
         email: "francosanchezbts@gmail.com",
         phone: "",
         photo: "",
+        slug: "franco-sanchez",
       },
       {
         id: "7",
@@ -86,6 +95,7 @@ export const events: Event[] = [
         email: "Guadalupeledda010@gmail.com",
         phone: "",
         photo: "",
+        slug: "guadalupe-ledda",
       },
       {
         id: "21",
@@ -93,6 +103,7 @@ export const events: Event[] = [
         email: "ivanjofre1506@gmail.com",
         phone: "",
         photo: "",
+        slug: "ivan-jofre",
       },
       {
         id: "13",
@@ -100,6 +111,7 @@ export const events: Event[] = [
         email: "Juancito.vargass2@gmail.com",
         phone: "",
         photo: "",
+        slug: "juan-vargas",
       },
       {
         id: "9",
@@ -107,6 +119,7 @@ export const events: Event[] = [
         email: "pennamelisa@gmail.com",
         phone: "",
         photo: "",
+        slug: "melisa-penna",
       },
       {
         id: "11",
@@ -114,6 +127,7 @@ export const events: Event[] = [
         email: "Mavi.fontana.costa@gmail.com",
         phone: "",
         photo: "",
+        slug: "mavi-fontana",
       },
       {
         id: "22",
@@ -121,6 +135,7 @@ export const events: Event[] = [
         email: "Martinruiz381@gmail.com",
         phone: "",
         photo: "",
+        slug: "martin-ruiz",
       },
       {
         id: "5",
@@ -128,6 +143,7 @@ export const events: Event[] = [
         email: "Tiagoschoology@gmail.com",
         phone: "",
         photo: "",
+        slug: "tiago-carrasco",
       },
       {
         id: "6",
@@ -135,6 +151,7 @@ export const events: Event[] = [
         email: "Valespin2001@icloud.com",
         phone: "",
         photo: "",
+        slug: "valentina-espin",
       },
       {
         id: "10",
@@ -142,6 +159,7 @@ export const events: Event[] = [
         email: "victoriamilagrosr@gmail.com",
         phone: "",
         photo: "",
+        slug: "victoria-ramirez",
       },
       {
         id: "17",
@@ -149,6 +167,7 @@ export const events: Event[] = [
         email: "vickilucero19@gmail.com",
         phone: "",
         photo: "",
+        slug: "victoria-lucero",
       },
       {
         id: "12",
@@ -156,6 +175,7 @@ export const events: Event[] = [
         email: "ribasezekiel@gmail.com",
         phone: "",
         photo: "",
+        slug: "zeki-rivas",
       },
       {
         id: "14",
@@ -163,6 +183,7 @@ export const events: Event[] = [
         email: "consolini_96@hotmail.com",
         phone: "",
         photo: "",
+        slug: "sabina-consoli",
       },
       {
         id: "18",
@@ -170,6 +191,7 @@ export const events: Event[] = [
         email: "guzmanrenzo76@gmail.com",
         phone: "",
         photo: "",
+        slug: "renzo-guzman",
       },
     ],
     tickets: [

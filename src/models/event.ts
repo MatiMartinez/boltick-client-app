@@ -28,6 +28,7 @@ interface PR {
   name: string;
   phone: string;
   photo: string;
+  slug: string;
 }
 
 interface Ticket {
