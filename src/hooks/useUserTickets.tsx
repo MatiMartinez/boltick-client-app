@@ -29,7 +29,16 @@ const useUserTickets = () => {
 
     try {
       const data = await ticketService.getTickets(walletAddress);
-      setTickets(data.tickets);
+
+      const orderedTickets = data.tickets.sort((a, b) => {
+        // Primero ordenar por uso: no usados (0) primero, usados (1) al final
+        if (a.used !== b.used) {
+          return a.used - b.used;
+        }
+        // Dentro del mismo grupo de uso, ordenar por fecha (más recientes primero)
+        return b.useDate - a.useDate;
+      });
+      setTickets(orderedTickets);
 
       toast({
         title: "Tickets cargados",
