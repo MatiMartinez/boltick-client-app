@@ -242,17 +242,15 @@ export default function EventDetails() {
               size="lg"
               height="60px"
               fontSize="lg"
-              bgGradient="linear(to-r, brand.500, purple.500)"
+              bg="gray.600"
               _hover={{
-                bgGradient: "linear(to-r, brand.600, purple.600)",
+                bg: "gray.600",
               }}
-              color="whiteAlpha.900"
-              isDisabled={summary.selectedTickets.length === 0}
-              isLoading={isLoading}
-              loadingText="Procesando compra..."
-              onClick={onPurchase}
+              color="whiteAlpha.600"
+              isDisabled={true}
+              cursor="not-allowed"
             >
-              {summary.selectedTickets.length === 0 ? "Selecciona tus entradas" : `Comprar • ${formatARS(summary.total)}`}
+              Venta Finalizada
             </Button>
 
             {summary.selectedTickets.length > 0 && (
