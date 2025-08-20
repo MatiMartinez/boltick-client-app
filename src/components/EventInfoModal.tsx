@@ -1,33 +1,18 @@
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  VStack,
-  Text,
-  Heading,
-  Box,
-  Image,
-  Button,
-  Link,
-} from "@chakra-ui/react";
-import { Calendar, MapPin, ExternalLink, Clock } from "lucide-react";
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, VStack, Text, Heading, Box, Image, Button, Link } from "@chakra-ui/react";
+import { Calendar, MapPin, Clock } from "lucide-react";
 import { Link as RouterLink } from "react-router-dom";
-import { Event } from "../models/event";
+
+import { useGetEvent } from "../hooks/useGetEvent";
 
 interface EventInfoModalProps {
   isOpen: boolean;
   onClose: () => void;
-  event: Event | null;
+  eventId: string;
 }
 
-export default function EventInfoModal({
-  isOpen,
-  onClose,
-  event,
-}: EventInfoModalProps) {
+export default function EventInfoModal({ isOpen, onClose, eventId }: EventInfoModalProps) {
+  const { event } = useGetEvent(eventId);
+
   if (!event) return null;
 
   return (
@@ -40,62 +25,27 @@ export default function EventInfoModal({
         <ModalCloseButton />
         <ModalBody px={4} pb={6} pt={6}>
           <VStack spacing={2} align="center">
-            <Box
-              w="100%"
-              aspectRatio={5 / 6}
-              overflow="hidden"
-              borderRadius="xl"
-              bg="gray.700"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Image
-                src={event.image}
-                alt={event.name}
-                w="100%"
-                h="100%"
-                objectFit="contain"
-              />
+            <Box w="100%" aspectRatio={5 / 6} overflow="hidden" borderRadius="xl" bg="gray.700" display="flex" alignItems="center" justifyContent="center">
+              <Image src={event.image} alt={event.name} w="100%" h="100%" objectFit="contain" />
             </Box>
             <Heading size="lg" color="whiteAlpha.900" textAlign="center" mb={2}>
               {event.name}
             </Heading>
-            <Box
-              display="flex"
-              alignItems="center"
-              gap={2}
-              color="whiteAlpha.700"
-            >
+            <Box display="flex" alignItems="center" gap={2} color="whiteAlpha.700">
               <Calendar size={18} />
               <Text fontSize="md" fontWeight="medium">
                 {event.date}
               </Text>
             </Box>
-            <Box
-              display="flex"
-              alignItems="center"
-              gap={2}
-              color="whiteAlpha.700"
-            >
+            <Box display="flex" alignItems="center" gap={2} color="whiteAlpha.700">
               <Clock size={18} />
               <Text fontSize="md" fontWeight="medium">
                 {event.time}
               </Text>
             </Box>
-            <Box
-              display="flex"
-              alignItems="center"
-              gap={2}
-              color="whiteAlpha.700"
-            >
+            <Box display="flex" alignItems="center" gap={2} color="whiteAlpha.700">
               <MapPin size={18} />
-              <Link
-                href={event.locationLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ textDecoration: "underline" }}
-              >
+              <Link href={event.locationLink} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline" }}>
                 <Text fontSize="md" fontWeight="medium">
                   Ver ubicación
                 </Text>

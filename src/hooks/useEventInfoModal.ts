@@ -1,20 +1,18 @@
 import { useState, useCallback } from "react";
 
-import { Event } from "../models/event";
-
 export default function useEventInfoModal() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
-  const open = useCallback((event: Event) => {
-    setSelectedEvent(event);
+  const open = useCallback((eventId: string) => {
+    setSelectedEventId(eventId);
     setIsOpen(true);
   }, []);
 
   const close = useCallback(() => {
     setIsOpen(false);
-    setSelectedEvent(null);
+    setSelectedEventId(null);
   }, []);
 
-  return { isOpen, selectedEvent, open, close };
+  return { isOpen, selectedEventId, open, close };
 }

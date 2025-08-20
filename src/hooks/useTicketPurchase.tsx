@@ -1,25 +1,23 @@
 import { useState, useMemo, useEffect } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 
 import useSession from "./useSession";
-import { events } from "../consts/events";
-import { Event } from "../models/event";
 import { NFTDTO, paymentService } from "../services/payment";
+import { Event } from "../models/event";
 
-export default function useTicketPurchase() {
-  const { id } = useParams();
+export default function useTicketPurchase(event: Event) {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const event = events.find((event) => event.id === id) as unknown as Event;
-
-  if (!event) {
-    navigate("/");
-  }
-
   const toast = useToast();
   const { isConnected, walletAddress, userInfo } = useSession();
+
+  const isFreeEvent = useMemo(() => {
+    return event.tickets.every((ticket) => ticket.price === 0);
+  }, [event.tickets]);
+
+  const maxTickets = isFreeEvent ? 2 : 10;
 
   const [quantities, setQuantities] = useState<Record<string, number>>(Object.fromEntries(event.tickets.map((ticket) => [ticket.id, 0])));
   const [isLoading, setIsLoading] = useState(false);
@@ -58,13 +56,12 @@ export default function useTicketPurchase() {
 
   const handleQuantityChange = (ticketId: string, increment: boolean) => {
     setQuantities((prev) => {
-      const maxQty = 10;
       const currentQty = prev[ticketId] || 0;
       const tier = event.tickets.find((ticket) => ticket.id === ticketId);
       if (!tier) return prev;
 
       let newQty = increment ? currentQty + 1 : currentQty - 1;
-      newQty = Math.max(0, Math.min(newQty, maxQty));
+      newQty = Math.max(0, Math.min(newQty, maxTickets));
 
       return { ...prev, [ticketId]: newQty };
     });
@@ -128,6 +125,56 @@ export default function useTicketPurchase() {
     }
   };
 
+  const onFreePurchase = async () => {
+    if (!isConnected || !userInfo?.email) {
+      toast({
+        title: "Iniciá sesión",
+        description: "Necesitás iniciar sesión para continuar con tu compra.",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const nfts = generateNFTs();
+
+      const freePayment = await paymentService.createFreePayment({
+        eventId: event.id,
+        eventName: event.name,
+        nfts: nfts,
+        prName: selectedPR,
+        userId: userInfo.email,
+        walletPublicKey: walletAddress,
+      });
+
+      if (freePayment.success === 1 && freePayment.data?.id) {
+        navigate(`/payment/success?external_reference=${freePayment.data?.id}&status=approved`);
+      } else {
+        toast({
+          title: "Error en la compra",
+          description: freePayment.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error en la compra",
+        description: error instanceof Error ? error.message : "Ha ocurrido un error",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const generateNFTs = (): NFTDTO[] => {
     return event.tickets
       .filter((ticket) => quantities[ticket.id] > 0)
@@ -142,10 +189,10 @@ export default function useTicketPurchase() {
   };
 
   return {
-    event,
     handleQuantityChange,
     isLoading,
     onPurchase,
+    onFreePurchase,
     quantities,
     summary,
     selectedPR,
@@ -154,5 +201,7 @@ export default function useTicketPurchase() {
     isRRPPDrawerOpen,
     handleSelectPR,
     removeRRPP,
+    isFreeEvent,
+    maxTickets,
   };
 }

@@ -1,10 +1,11 @@
-import { Box, Container, Grid, Heading, Image, Text, VStack, Badge, HStack, Button } from "@chakra-ui/react";
-import { Calendar, MapPin } from "lucide-react";
-import { Link as RouterLink } from "react-router-dom";
+import { Box, Container, Grid, Heading, VStack, Spinner, Text, Center } from "@chakra-ui/react";
 
-import { events } from "../consts/events";
+import { useGetAllEvents } from "../hooks/useGetAllEvents";
+import EventCard from "./EventCard";
 
 export default function EventList() {
+  const { events, isLoading } = useGetAllEvents();
+
   return (
     <Box py={{ base: 12, md: 20 }} bg="gray.800" id="events-section">
       <Container maxW="container.xl">
@@ -13,86 +14,29 @@ export default function EventList() {
             Próximos Eventos
           </Heading>
 
-          <Grid
-            templateColumns={{
-              base: "1fr",
-              md: "repeat(2, 1fr)",
-              lg: "repeat(4, 1fr)",
-            }}
-            gap={{ base: 4, md: 8 }}
-          >
-            {events.map((event) => (
-              <Box
-                key={event.id}
-                bg="gray.700"
-                borderRadius="2xl"
-                overflow="hidden"
-                transition="all 0.3s"
-                _hover={{
-                  transform: "translateY(-4px)",
-                  shadow: "2xl",
-                }}
-                position="relative"
-                display="flex"
-                flexDirection="column"
-              >
-                <Box
-                  w="100%"
-                  aspectRatio={{ base: 3 / 4, md: 4 / 5 }}
-                  overflow="hidden"
-                  borderRadius="xl"
-                  bg="gray.700"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                >
-                  <Image src={event.image} alt={event.name} w="100%" h="100%" objectFit="contain" />
-                </Box>
-                <VStack p={{ base: 4, md: 6 }} align="stretch" spacing={{ base: 1, md: 2 }} flex={1}>
-                  <Badge
-                    alignSelf="flex-start"
-                    px={{ base: 2, md: 3 }}
-                    py={0.5}
-                    borderRadius="full"
-                    bg="brand.500"
-                    color="white"
-                    fontSize="xs"
-                  >
-                    {event.category}
-                  </Badge>
-                  <Heading size={{ base: "sm", md: "md" }} letterSpacing="tight" mt={1}>
-                    {event.name}
-                  </Heading>
-
-                  <VStack align="stretch" spacing={{ base: 1, md: 2 }} flex={1} mt={1}>
-                    <HStack color="whiteAlpha.700" fontSize={{ base: "xs", md: "sm" }}>
-                      <Calendar size={14} />
-                      <Text>{event.date}</Text>
-                    </HStack>
-                    <HStack color="whiteAlpha.700" fontSize={{ base: "xs", md: "sm" }}>
-                      <MapPin size={14} />
-                      <Text>{event.location}</Text>
-                    </HStack>
-                  </VStack>
-
-                  <Button
-                    as={RouterLink}
-                    to={`/event/${event.id}`}
-                    size={{ base: "md", md: "lg" }}
-                    fontSize={{ base: "sm", md: "md" }}
-                    bgGradient="linear(to-r, brand.500, purple.500)"
-                    _hover={{
-                      bgGradient: "linear(to-r, brand.600, purple.600)",
-                    }}
-                    color="whiteAlpha.900"
-                    mt={{ base: 2, md: 2 }}
-                  >
-                    Ir a comprar
-                  </Button>
-                </VStack>
-              </Box>
-            ))}
-          </Grid>
+          {isLoading ? (
+            <Center py={20}>
+              <VStack spacing={4}>
+                <Spinner size="xl" color="brand.500" thickness="4px" />
+                <Text color="whiteAlpha.700" fontSize="lg">
+                  Cargando eventos...
+                </Text>
+              </VStack>
+            </Center>
+          ) : (
+            <Grid
+              templateColumns={{
+                base: "1fr",
+                md: "repeat(2, 1fr)",
+                lg: "repeat(4, 1fr)",
+              }}
+              gap={{ base: 4, md: 8 }}
+            >
+              {events.map((event) => (
+                <EventCard key={event.id} event={event} />
+              ))}
+            </Grid>
+          )}
         </VStack>
       </Container>
     </Box>

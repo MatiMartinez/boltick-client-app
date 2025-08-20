@@ -22,15 +22,15 @@ import { QRCodeSVG } from "qrcode.react";
 
 import useUserTickets from "../hooks/useUserTickets";
 import { formatFullDate, formatTime } from "../utils/date";
-import { events } from "../consts/events";
 import EventInfoModal from "../components/EventInfoModal";
 import { Info } from "lucide-react";
 import useEventInfoModal from "../hooks/useEventInfoModal";
 
 export default function UserTickets() {
-  const { tickets, isLoading, refreshTickets, selectedTicket, isOpen, onClose, handleShowQR, qrToken, timeLeft, generatingTicketId } =
-    useUserTickets();
+  const { tickets, isLoading, refreshTickets, selectedTicket, isOpen, onClose, handleShowQR, qrToken, timeLeft, generatingTicketId } = useUserTickets();
   const eventInfoModal = useEventInfoModal();
+
+  const activeEvents = ["primavera-fest-2025"];
 
   return (
     <Box py={[0, 20]}>
@@ -65,8 +65,7 @@ export default function UserTickets() {
                 Aún no tienes tickets comprados.
               </Heading>
               <Text color="whiteAlpha.700" fontSize="md" textAlign="center" maxW="md">
-                ¡No te pierdas la oportunidad de vivir una experiencia única! Explora los eventos disponibles y adquiere tus tickets
-                fácilmente.
+                ¡No te pierdas la oportunidad de vivir una experiencia única! Explora los eventos disponibles y adquiere tus tickets fácilmente.
               </Text>
               <Button
                 as="a"
@@ -89,7 +88,7 @@ export default function UserTickets() {
           ) : (
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={8}>
               {tickets.map((ticket) => {
-                const event = events.find((e) => e.id === ticket.eventId);
+                const isActiveEvent = activeEvents.includes(ticket.eventId);
 
                 return (
                   <Box
@@ -100,17 +99,35 @@ export default function UserTickets() {
                     transition="transform 0.2s"
                     _hover={{ transform: "translateY(-4px)" }}
                   >
-                    <Image
-                      src={ticket.imageUrl}
-                      alt={ticket.assetId}
-                      h="300px"
-                      w="300px"
-                      objectFit="cover"
-                      objectPosition="center"
-                      borderRadius="xl"
-                      borderBottomRadius="0"
-                      border="1px solid rgba(255,255,255,0.2)"
-                    />
+                    {ticket.imageUrl ? (
+                      <Image
+                        src={ticket.imageUrl}
+                        alt={ticket.assetId}
+                        h="300px"
+                        w="100%"
+                        objectFit="cover"
+                        objectPosition="center"
+                        borderRadius="xl"
+                        borderBottomRadius="0"
+                        border="1px solid rgba(255,255,255,0.2)"
+                      />
+                    ) : (
+                      <Box
+                        h="300px"
+                        w="100%"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        bg="gray.600"
+                        borderRadius="xl"
+                        borderBottomRadius="0"
+                        border="1px solid rgba(255,255,255,0.2)"
+                      >
+                        <Box fontSize="64px" color="brand.400" as="span" aria-label="Ticket icon">
+                          🎫
+                        </Box>
+                      </Box>
+                    )}
                     <VStack p={4} spacing={2} align="stretch">
                       <Badge alignSelf="start" colorScheme="brand">
                         {ticket.type}
@@ -121,35 +138,34 @@ export default function UserTickets() {
                       <Text fontSize="sm" color="whiteAlpha.600">
                         ID de Entrada: {ticket.ticketNumber}
                       </Text>
-                      {ticket.used === 1 ? (
-                        <Text color="green.300" fontWeight="bold">
-                          {ticket.useDate ? `Ingreso ${formatFullDate(ticket.useDate)}` : "Sin información de ingreso"}
+
+                      {isActiveEvent ? (
+                        <Text color="yellow.400" fontWeight="bold" fontSize="sm" textAlign="center">
+                          QR disponible el día del evento
                         </Text>
                       ) : (
-                        <Button
-                          leftIcon={<QrCode size={16} />}
-                          onClick={() => handleShowQR(ticket)}
-                          variant="outline"
-                          borderColor="brand.400"
-                          _hover={{ bg: "brand.500" }}
-                          isLoading={generatingTicketId === ticket.ticketNumber}
-                          loadingText="Generando..."
-                        >
-                          Mostrar QR
-                        </Button>
+                        <Text color="green.300" fontWeight="bold" fontSize="sm" textAlign="center">
+                          {ticket.used === 1 ? `Ingreso ${formatFullDate(ticket.useDate)}` : "Ticket no utilizado"}
+                        </Text>
                       )}
 
-                      {event && (
-                        <Button
-                          mt={1}
-                          leftIcon={<Info size={16} />}
-                          onClick={() => eventInfoModal.open(event)}
-                          variant="outline"
-                          colorScheme="brand"
-                        >
-                          Ver Evento
-                        </Button>
-                      )}
+                      {/**
+                             <Button
+                            leftIcon={<QrCode size={16} />}
+                            onClick={() => handleShowQR(ticket)}
+                            variant="outline"
+                            borderColor="brand.400"
+                            _hover={{ bg: "brand.500" }}
+                            isLoading={generatingTicketId === ticket.ticketNumber}
+                            loadingText="Generando..."
+                          >
+                            Mostrar QR
+                          </Button>
+                          */}
+
+                      <Button mt={1} leftIcon={<Info size={16} />} onClick={() => eventInfoModal.open(ticket.eventId)} variant="outline" colorScheme="brand">
+                        Ver Evento
+                      </Button>
                     </VStack>
                   </Box>
                 );
@@ -211,7 +227,9 @@ export default function UserTickets() {
         </ModalContent>
       </Modal>
 
-      <EventInfoModal isOpen={eventInfoModal.isOpen} onClose={eventInfoModal.close} event={eventInfoModal.selectedEvent} />
+      {eventInfoModal.selectedEventId && (
+        <EventInfoModal isOpen={eventInfoModal.isOpen} onClose={eventInfoModal.close} eventId={eventInfoModal.selectedEventId} />
+      )}
     </Box>
   );
 }
