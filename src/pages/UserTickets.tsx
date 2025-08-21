@@ -30,7 +30,7 @@ export default function UserTickets() {
   const { tickets, isLoading, refreshTickets, selectedTicket, isOpen, onClose, handleShowQR, qrToken, timeLeft, generatingTicketId } = useUserTickets();
   const eventInfoModal = useEventInfoModal();
 
-  const activeEvents = ["primavera-fest-2025"];
+  const activeEvents = ["primavera-en-el-bosque-2025"];
 
   return (
     <Box py={[0, 20]}>
@@ -95,6 +95,7 @@ export default function UserTickets() {
                     key={ticket.createdAt}
                     bg="gray.700"
                     borderRadius="xl"
+                    maxW="300px"
                     overflow="hidden"
                     transition="transform 0.2s"
                     _hover={{ transform: "translateY(-4px)" }}
@@ -104,7 +105,7 @@ export default function UserTickets() {
                         src={ticket.imageUrl}
                         alt={ticket.assetId}
                         h="300px"
-                        w="100%"
+                        w="300px"
                         objectFit="cover"
                         objectPosition="center"
                         borderRadius="xl"
@@ -114,7 +115,7 @@ export default function UserTickets() {
                     ) : (
                       <Box
                         h="300px"
-                        w="100%"
+                        w="300px"
                         display="flex"
                         alignItems="center"
                         justifyContent="center"
