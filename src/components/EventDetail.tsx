@@ -52,7 +52,7 @@ export default function EventDetail(event: Event) {
         <Grid templateColumns={{ base: "1fr", lg: "3fr 2fr" }} gap={12}>
           {/* Left Column - Event Details */}
           <VStack align="stretch" spacing={8}>
-            <Image src={event.image} alt={event.name} borderRadius="2xl" objectFit="cover" h={{ base: "200px", md: "350px" }} />
+            <Image src={event.image} alt={event.name} borderRadius="2xl" objectFit="contain" h={{ base: "200px", md: "350px" }} />
 
             <VStack align="stretch" spacing={{ base: 4, md: 6 }}>
               <Heading size="2xl">{event.name}</Heading>
