@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState, ReactNode } from "react";
 import { Web3Auth } from "@web3auth/modal";
-import { CHAIN_NAMESPACES, IProvider, WEB3AUTH_NETWORK } from "@web3auth/base";
+import { CHAIN_NAMESPACES, IProvider, WALLET_ADAPTERS, WEB3AUTH_NETWORK } from "@web3auth/base";
 import { SolanaPrivateKeyProvider } from "@web3auth/solana-provider";
 
 import SolanaRpc from "../web3/solanaRPC";
@@ -78,7 +78,68 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
       });
 
       setWeb3auth(web3auth);
-      await web3auth.initModal();
+
+      await web3auth.initModal({
+        modalConfig: {
+          [WALLET_ADAPTERS.AUTH]: {
+            label: "auth",
+            loginMethods: {
+              twitter: {
+                name: "twitter",
+                showOnModal: false,
+              },
+              discord: {
+                name: "discord",
+                showOnModal: false,
+              },
+              farcaster: {
+                name: "farcaster",
+                showOnModal: false,
+              },
+              apple: {
+                name: "apple",
+                showOnModal: false,
+              },
+              github: {
+                name: "github",
+                showOnModal: false,
+              },
+              reddit: {
+                name: "reddit",
+                showOnModal: false,
+              },
+              line: {
+                name: "line",
+                showOnModal: false,
+              },
+              kakao: {
+                name: "kakao",
+                showOnModal: false,
+              },
+              linkedin: {
+                name: "linkedin",
+                showOnModal: false,
+              },
+              twitch: {
+                name: "twitch",
+                showOnModal: false,
+              },
+              telegram: {
+                name: "telegram",
+                showOnModal: false,
+              },
+              wechat: {
+                name: "wechat",
+                showOnModal: false,
+              },
+              weibo: {
+                name: "weibo",
+                showOnModal: false,
+              },
+            },
+          },
+        },
+      });
 
       if (web3auth.connected) {
         setProvider(web3auth.provider);
