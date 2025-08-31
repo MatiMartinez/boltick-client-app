@@ -5,12 +5,12 @@ const TICKETS_ENDPOINT = "/tickets";
 
 export const ticketService = {
   async getTickets(input: string) {
-    const response = await httpInstance.get<{ tickets: Ticket[] }>(`${TICKETS_ENDPOINT}/get-tickets/${input}`);
+    const response = await httpInstance.get<{ tickets: Ticket[] }>(`${TICKETS_ENDPOINT}/get-tickets/${input}`, { isPrivate: true });
     return response.data;
   },
 
   async generateEntry(input: string) {
-    const response = await httpInstance.post<GenerateEntryOutput>(`${TICKETS_ENDPOINT}/generate-entry`, { ticketNumber: input });
+    const response = await httpInstance.post<GenerateEntryOutput>(`${TICKETS_ENDPOINT}/generate-entry`, { ticketNumber: input }, { isPrivate: true });
     return response.data;
   },
 };

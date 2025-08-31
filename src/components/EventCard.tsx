@@ -28,9 +28,11 @@ export default function EventCard({ event }: EventCardProps) {
     >
       <Box
         w="100%"
-        aspectRatio={{ base: 4 / 5, md: 4 / 5 }}
+        aspectRatio={{ base: 3 / 4, md: 3 / 4 }}
         overflow="hidden"
         borderRadius="xl"
+        borderLeftRadius="0"
+        borderRightRadius="0"
         bg="gray.700"
         display="flex"
         alignItems="center"

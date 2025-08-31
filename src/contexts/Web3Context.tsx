@@ -4,11 +4,13 @@ import { CHAIN_NAMESPACES, IProvider, WALLET_ADAPTERS, WEB3AUTH_NETWORK } from "
 import { SolanaPrivateKeyProvider } from "@web3auth/solana-provider";
 
 import SolanaRpc from "../web3/solanaRPC";
+import { updateAuthToken } from "../services/httpInstance";
 
 interface UserInfo {
   name?: string;
   email?: string;
   profileImage?: string;
+  idToken?: string;
 }
 
 interface Web3ContextType {
@@ -175,6 +177,8 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
       setWalletAddress("");
       setBalance("0.0000");
       setUserInfo(null);
+
+      updateAuthToken(null);
     } catch (error) {
       console.error("Error disconnecting:", error);
     }
@@ -208,7 +212,10 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
         name: user.name,
         email: user.email,
         profileImage: user.profileImage,
+        idToken: user.idToken,
       });
+
+      updateAuthToken(user.idToken || null);
     } catch (error) {
       console.error("Error getting user info:", error);
     }

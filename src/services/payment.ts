@@ -5,17 +5,17 @@ const PAYMENT_ENDPOINT = "/payments";
 
 export const paymentService = {
   async createPayment(input: CreatePayment) {
-    const response = await httpInstance.post<CreatePaymentOutput>(`${PAYMENT_ENDPOINT}/create-payment-link`, input);
+    const response = await httpInstance.post<CreatePaymentOutput>(`${PAYMENT_ENDPOINT}/create-payment-link`, input, { isPrivate: true });
     return response.data;
   },
 
   async createFreePayment(input: CreateFreePayment) {
-    const response = await httpInstance.post<CreateFreePaymentOutput>(`${PAYMENT_ENDPOINT}/create-free-payment`, input);
+    const response = await httpInstance.post<CreateFreePaymentOutput>(`${PAYMENT_ENDPOINT}/create-free-payment`, input, { isPrivate: true });
     return response.data;
   },
 
   async updatePayment(input: UpdatePayment) {
-    const response = await httpInstance.post<Payment>(`${PAYMENT_ENDPOINT}/update-payment-callback`, input);
+    const response = await httpInstance.post<Payment>(`${PAYMENT_ENDPOINT}/update-payment-callback`, input, { isPrivate: true });
     return response.data;
   },
 };
