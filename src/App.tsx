@@ -14,6 +14,7 @@ import PaymentProcessing from "./pages/payment/PaymentProcessing";
 import PaymentError from "./pages/payment/PaymentError";
 import PaymentUnknown from "./pages/payment/PaymentUnknown";
 import Web3Provider from "./contexts/Web3Context";
+import SessionLoading from "./components/SessionLoading";
 import ReturnPolicy from "./pages/ReturnPolicy";
 
 export default function App() {
@@ -21,30 +22,29 @@ export default function App() {
     <Web3Provider>
       <ChakraProvider theme={theme}>
         <Router>
-          <Layout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/event/:id" element={<EventDetails />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/about" element={<About />} />
-              <Route
-                path="/tickets"
-                element={
-                  <PrivateRoute>
-                    <UserTickets />
-                  </PrivateRoute>
-                }
-              />
-              <Route path="/payment/success" element={<PaymentSuccess />} />
-              <Route
-                path="/payment/processing"
-                element={<PaymentProcessing />}
-              />
-              <Route path="/payment/error" element={<PaymentError />} />
-              <Route path="/payment/unknown" element={<PaymentUnknown />} />
-              <Route path="/return-policy" element={<ReturnPolicy />} />
-            </Routes>
-          </Layout>
+          <SessionLoading>
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/event/:id" element={<EventDetails />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/about" element={<About />} />
+                <Route
+                  path="/tickets"
+                  element={
+                    <PrivateRoute>
+                      <UserTickets />
+                    </PrivateRoute>
+                  }
+                />
+                <Route path="/payment/success" element={<PaymentSuccess />} />
+                <Route path="/payment/processing" element={<PaymentProcessing />} />
+                <Route path="/payment/error" element={<PaymentError />} />
+                <Route path="/payment/unknown" element={<PaymentUnknown />} />
+                <Route path="/return-policy" element={<ReturnPolicy />} />
+              </Routes>
+            </Layout>
+          </SessionLoading>
         </Router>
       </ChakraProvider>
     </Web3Provider>

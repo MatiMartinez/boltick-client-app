@@ -18,6 +18,8 @@ interface Web3ContextType {
   walletAddress: string;
   balance: string;
   userInfo: UserInfo | null;
+  web3auth: Web3Auth | null;
+  isInitializing: boolean;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
   refreshBalance: () => Promise<void>;
@@ -28,6 +30,8 @@ export const Web3Context = createContext<Web3ContextType>({
   walletAddress: "",
   balance: "0.0000",
   userInfo: null,
+  web3auth: null,
+  isInitializing: true,
   connect: async () => {},
   disconnect: async () => {},
   refreshBalance: async () => {},
@@ -44,6 +48,7 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
   const [walletAddress, setWalletAddress] = useState<string>("");
   const [balance, setBalance] = useState<string>("0.0000");
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
     init();
@@ -146,9 +151,13 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
       if (web3auth.connected) {
         setProvider(web3auth.provider);
         setIsConnected(true);
+        return;
       }
+
+      setIsInitializing(false);
     } catch (error) {
       console.error("Error initializing Web3Auth:", error);
+      setIsInitializing(false);
     }
   };
 
@@ -197,8 +206,11 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
       setBalance(currentBalance);
 
       await getUserInfo();
+
+      setIsInitializing(false);
     } catch (error) {
       console.error("Error loading wallet data:", error);
+      setIsInitializing(false);
     }
   };
 
@@ -239,6 +251,8 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
         walletAddress,
         balance,
         userInfo,
+        web3auth,
+        isInitializing,
         connect,
         disconnect,
         refreshBalance,

@@ -1,14 +1,5 @@
 import { Link as RouterLink } from "react-router-dom";
-import {
-  Box,
-  Container,
-  VStack,
-  Heading,
-  Text,
-  Button,
-  Icon,
-  Spinner,
-} from "@chakra-ui/react";
+import { Box, Container, VStack, Heading, Text, Button, Icon, Spinner } from "@chakra-ui/react";
 import { CheckCircle } from "lucide-react";
 
 import useUpdatePayment from "../../hooks/useUpdatePayment";
@@ -37,8 +28,7 @@ export default function PaymentSuccess() {
             Tu compra ha sido procesada correctamente.
           </Text>
           <Text color="yellow.300" fontSize="md">
-            Recuerda: tus tickets pueden demorar unos minutos en aparecer en tu
-            billetera.
+            Recuerda: tus tickets pueden demorar unos minutos en aparecer en tu billetera.
           </Text>
           {isConnected ? (
             <>
