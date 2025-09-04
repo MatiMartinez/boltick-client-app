@@ -1,23 +1,23 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import theme from "./theme";
-import Layout from "./components/Layout";
-import Home from "./pages/Home";
-import EventDetails from "./pages/EventDetails";
-import Contact from "./pages/Contact";
-import About from "./pages/About";
-import UserTickets from "./pages/UserTickets";
-import PrivateRoute from "./components/PrivateRoute";
-import PaymentSuccess from "./pages/payment/PaymentSuccess";
-import PaymentProcessing from "./pages/payment/PaymentProcessing";
-import PaymentError from "./pages/payment/PaymentError";
-import PaymentUnknown from "./pages/payment/PaymentUnknown";
-import Web3Provider from "./contexts/Web3Context";
-import SessionLoading from "./components/SessionLoading";
-import ReturnPolicy from "./pages/ReturnPolicy";
+import MaintenanceMode from "./components/MaintenanceMode";
+
+// Variable para controlar el modo de mantenimiento
+const MAINTENANCE_MODE = true;
 
 export default function App() {
+  // Si está en modo mantenimiento, mostrar solo la página de mantenimiento
+  if (MAINTENANCE_MODE) {
+    return (
+      <ChakraProvider theme={theme}>
+        <MaintenanceMode />
+      </ChakraProvider>
+    );
+  }
+
+  // Código original de la aplicación (comentado para referencia)
+  /*
   return (
     <Web3Provider>
       <ChakraProvider theme={theme}>
@@ -49,4 +49,5 @@ export default function App() {
       </ChakraProvider>
     </Web3Provider>
   );
+  */
 }
