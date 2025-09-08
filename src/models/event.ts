@@ -25,7 +25,7 @@ interface Artist {
   name: string;
 }
 
-interface PR {
+export interface PR {
   id: string;
   email: string;
   name: string;

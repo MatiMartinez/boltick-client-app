@@ -16,16 +16,20 @@ import {
   HStack,
   IconButton,
   Image,
+  Input,
+  InputGroup,
+  InputRightElement,
   Link,
   List,
   ListItem,
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { Calendar, MapPin, Users, Clock, Plus, Minus } from "lucide-react";
+import { Calendar, MapPin, Users, Clock, Plus, Minus, X } from "lucide-react";
 
 import { Event } from "../models/event";
 import useTicketPurchase from "../hooks/useTicketPurchase";
+import { useRRPPSearch } from "../hooks/useRRPPSearch";
 import { formatARS } from "../utils/currency";
 
 export default function EventDetail(event: Event) {
@@ -45,6 +49,7 @@ export default function EventDetail(event: Event) {
     isFreeEvent,
     maxTickets,
   } = useTicketPurchase(event);
+  const { searchTerm, setSearchTerm, filteredPRs, clearSearch } = useRRPPSearch(event.prs);
 
   return (
     <Box py={{ base: 5, md: 10 }}>
@@ -224,23 +229,69 @@ export default function EventDetail(event: Event) {
                 <DrawerOverlay />
                 <DrawerContent>
                   <DrawerCloseButton />
-                  <DrawerHeader>Seleccionar RRPP</DrawerHeader>
+                  <DrawerHeader>
+                    <VStack align="stretch" spacing={4}>
+                      <Text fontSize="lg" fontWeight="bold">
+                        Seleccionar RRPP
+                      </Text>
+                      <InputGroup>
+                        <Input
+                          placeholder="Buscar RRPP..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          bg="gray.700"
+                          borderColor="gray.600"
+                          _placeholder={{ color: "gray.400" }}
+                          _focus={{
+                            borderColor: "brand.500",
+                            boxShadow: "0 0 0 1px var(--chakra-colors-brand-500)",
+                          }}
+                        />
+                        {searchTerm && (
+                          <InputRightElement>
+                            <IconButton
+                              aria-label="Limpiar búsqueda"
+                              icon={<X size={16} />}
+                              size="sm"
+                              variant="ghost"
+                              onClick={clearSearch}
+                              color="gray.400"
+                              _hover={{ color: "white" }}
+                            />
+                          </InputRightElement>
+                        )}
+                      </InputGroup>
+                    </VStack>
+                  </DrawerHeader>
                   <DrawerBody>
-                    <List spacing={3}>
-                      {event.prs.map((pr) => (
-                        <ListItem
-                          key={pr.id}
-                          py={2}
-                          px={3}
-                          borderRadius="md"
-                          _hover={{ bg: "gray.600", cursor: "pointer" }}
-                          bg={selectedPR === pr.name ? "brand.100" : undefined}
-                          onClick={() => handleSelectPR(pr.name)}
-                        >
-                          {pr.name}
-                        </ListItem>
-                      ))}
-                    </List>
+                    {filteredPRs.length > 0 ? (
+                      <List spacing={3}>
+                        {filteredPRs.map((pr) => (
+                          <ListItem
+                            key={pr.id}
+                            py={2}
+                            px={3}
+                            borderRadius="md"
+                            _hover={{ bg: "gray.600", cursor: "pointer" }}
+                            bg={selectedPR === pr.name ? "brand.100" : undefined}
+                            onClick={() => handleSelectPR(pr.name)}
+                          >
+                            {pr.name}
+                          </ListItem>
+                        ))}
+                      </List>
+                    ) : (
+                      <VStack spacing={4} py={8}>
+                        <Text color="gray.400" textAlign="center">
+                          No se encontraron RRPPs que coincidan con "{searchTerm}"
+                        </Text>
+                        {searchTerm && (
+                          <Button size="sm" variant="outline" colorScheme="brand" onClick={clearSearch}>
+                            Limpiar búsqueda
+                          </Button>
+                        )}
+                      </VStack>
+                    )}
                   </DrawerBody>
                 </DrawerContent>
               </Drawer>
