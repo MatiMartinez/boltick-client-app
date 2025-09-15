@@ -30,7 +30,8 @@ export default function UserTickets() {
   const { tickets, isLoading, refreshTickets, selectedTicket, isOpen, onClose, handleShowQR, qrToken, timeLeft, generatingTicketId } = useUserTickets();
   const eventInfoModal = useEventInfoModal();
 
-  const activeEvents = ["primavera-en-el-bosque-2025"];
+  const activeEvents: string[] = [];
+  const ongoingEvents: string[] = ["primavera-en-el-bosque-2025"];
 
   return (
     <Box py={[0, 20]}>
@@ -89,6 +90,7 @@ export default function UserTickets() {
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={8}>
               {tickets.map((ticket) => {
                 const isActiveEvent = activeEvents.includes(ticket.eventId);
+                const isOngoingEvent = ongoingEvents.includes(ticket.eventId);
 
                 return (
                   <Box
@@ -140,29 +142,30 @@ export default function UserTickets() {
                         ID de Entrada: {ticket.ticketNumber}
                       </Text>
 
+                      {/* Caso 1: Eventos activos (futuros) */}
                       {isActiveEvent ? (
                         <Text color="yellow.400" fontWeight="bold" fontSize="sm" textAlign="center">
                           QR disponible el día del evento
                         </Text>
+                      ) : isOngoingEvent ? (
+                        /* Caso 2: Eventos ocurriendo (presentes) */
+                        <Button
+                          leftIcon={<QrCode size={16} />}
+                          onClick={() => handleShowQR(ticket)}
+                          variant="outline"
+                          borderColor="brand.400"
+                          _hover={{ bg: "brand.500" }}
+                          isLoading={generatingTicketId === ticket.ticketNumber}
+                          loadingText="Generando..."
+                        >
+                          Mostrar QR
+                        </Button>
                       ) : (
+                        /* Caso 3: Eventos pasados o restantes */
                         <Text color="green.300" fontWeight="bold" fontSize="sm" textAlign="center">
                           {ticket.used === 1 ? `Ingreso ${formatFullDate(ticket.useDate)}` : "Ticket no utilizado"}
                         </Text>
                       )}
-
-                      {/**
-                             <Button
-                            leftIcon={<QrCode size={16} />}
-                            onClick={() => handleShowQR(ticket)}
-                            variant="outline"
-                            borderColor="brand.400"
-                            _hover={{ bg: "brand.500" }}
-                            isLoading={generatingTicketId === ticket.ticketNumber}
-                            loadingText="Generando..."
-                          >
-                            Mostrar QR
-                          </Button>
-                          */}
 
                       <Button mt={1} leftIcon={<Info size={16} />} onClick={() => eventInfoModal.open(ticket.eventId)} variant="outline" colorScheme="brand">
                         Ver Evento
