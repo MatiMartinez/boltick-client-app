@@ -149,17 +149,23 @@ export default function UserTickets() {
                         </Text>
                       ) : isOngoingEvent ? (
                         /* Caso 2: Eventos ocurriendo (presentes) */
-                        <Button
-                          leftIcon={<QrCode size={16} />}
-                          onClick={() => handleShowQR(ticket)}
-                          variant="outline"
-                          borderColor="brand.400"
-                          _hover={{ bg: "brand.500" }}
-                          isLoading={generatingTicketId === ticket.ticketNumber}
-                          loadingText="Generando..."
-                        >
-                          Mostrar QR
-                        </Button>
+                        ticket.used === 1 ? (
+                          <Text color="green.300" fontWeight="bold" fontSize="sm" textAlign="center">
+                            Ingreso {formatFullDate(ticket.useDate)}
+                          </Text>
+                        ) : (
+                          <Button
+                            leftIcon={<QrCode size={16} />}
+                            onClick={() => handleShowQR(ticket)}
+                            variant="outline"
+                            borderColor="brand.400"
+                            _hover={{ bg: "brand.500" }}
+                            isLoading={generatingTicketId === ticket.ticketNumber}
+                            loadingText="Generando..."
+                          >
+                            Mostrar QR
+                          </Button>
+                        )
                       ) : (
                         /* Caso 3: Eventos pasados o restantes */
                         <Text color="green.300" fontWeight="bold" fontSize="sm" textAlign="center">
