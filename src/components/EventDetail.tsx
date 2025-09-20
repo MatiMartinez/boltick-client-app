@@ -128,45 +128,51 @@ export default function EventDetail(event: Event) {
                 <Text>Disponibilidad limitada</Text>
               </HStack>
 
-              {event.tickets.map((ticket) => (
-                <Box key={ticket.id} p={6} bg="gray.600" borderRadius="xl">
-                  <VStack align="stretch" spacing={4}>
-                    <Flex justify="space-between" align="center">
-                      <Heading size="md">{ticket.name}</Heading>
-                      <Text color="brand.400" fontSize="lg" fontWeight="bold">
-                        {isFreeEvent ? "Gratis" : formatARS(ticket.priceWithoutTax)}
-                      </Text>
-                    </Flex>
-                    <Text color="whiteAlpha.700">{ticket.description}</Text>
-                    <HStack justify="space-between" align="center">
-                      <Text fontSize="sm" color="whiteAlpha.600">
-                        {isFreeEvent ? `Máximo ${maxTickets} entradas` : "Unidades limitadas"}
-                      </Text>
-                      <HStack spacing={2}>
-                        <IconButton
-                          aria-label="Reducir cantidad"
-                          icon={<Minus size={16} />}
-                          onClick={() => handleQuantityChange(ticket.id, false)}
-                          isDisabled={quantities[ticket.id] === 0}
-                          variant="outline"
-                          size="sm"
-                        />
-                        <Text w="40px" textAlign="center" fontSize="lg" fontWeight="medium">
-                          {quantities[ticket.id]}
+              {event.tickets.map((ticket) => {
+                const isSoldOut = ticket.availableTickets === 0;
+
+                return (
+                  <Box key={ticket.id} p={6} bg="gray.600" borderRadius="xl">
+                    <VStack align="stretch" spacing={4}>
+                      <Flex justify="space-between" align="center">
+                        <Heading size="md">{ticket.name}</Heading>
+                        <Text color="brand.400" fontSize="lg" fontWeight="bold">
+                          {isFreeEvent ? "Gratis" : formatARS(ticket.priceWithoutTax)}
                         </Text>
-                        <IconButton
-                          aria-label="Aumentar cantidad"
-                          icon={<Plus size={16} />}
-                          onClick={() => handleQuantityChange(ticket.id, true)}
-                          isDisabled={quantities[ticket.id] === maxTickets}
-                          variant="outline"
-                          size="sm"
-                        />
+                      </Flex>
+                      <Text color="whiteAlpha.700">{ticket.description}</Text>
+                      <HStack justify="space-between" align="center">
+                        <Text fontSize="sm" color={isSoldOut ? "red.300" : "whiteAlpha.600"}>
+                          {isSoldOut ? "Entradas agotadas" : isFreeEvent ? `Máximo ${maxTickets} entradas` : "Unidades limitadas"}
+                        </Text>
+                        {!isSoldOut && (
+                          <HStack spacing={2}>
+                            <IconButton
+                              aria-label="Reducir cantidad"
+                              icon={<Minus size={16} />}
+                              onClick={() => handleQuantityChange(ticket.id, false)}
+                              isDisabled={quantities[ticket.id] === 0}
+                              variant="outline"
+                              size="sm"
+                            />
+                            <Text w="40px" textAlign="center" fontSize="lg" fontWeight="medium">
+                              {quantities[ticket.id]}
+                            </Text>
+                            <IconButton
+                              aria-label="Aumentar cantidad"
+                              icon={<Plus size={16} />}
+                              onClick={() => handleQuantityChange(ticket.id, true)}
+                              isDisabled={quantities[ticket.id] === maxTickets || quantities[ticket.id] >= ticket.availableTickets}
+                              variant="outline"
+                              size="sm"
+                            />
+                          </HStack>
+                        )}
                       </HStack>
-                    </HStack>
-                  </VStack>
-                </Box>
-              ))}
+                    </VStack>
+                  </Box>
+                );
+              })}
 
               {summary.selectedTickets.length > 0 && (
                 <VStack align="stretch" bg="gray.600" p={6} borderRadius="xl" spacing={4}>

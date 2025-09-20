@@ -60,6 +60,8 @@ export default function useTicketPurchase(event: Event) {
       const tier = event.tickets.find((ticket) => ticket.id === ticketId);
       if (!tier) return prev;
 
+      if (tier.availableTickets === 0) return prev;
+
       let newQty = increment ? currentQty + 1 : currentQty - 1;
       newQty = Math.max(0, Math.min(newQty, maxTickets));
 
