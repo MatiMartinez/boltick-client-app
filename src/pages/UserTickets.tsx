@@ -31,7 +31,7 @@ export default function UserTickets() {
   const eventInfoModal = useEventInfoModal();
 
   const activeEvents: string[] = [];
-  const ongoingEvents: string[] = ["primavera-en-el-bosque-2025"];
+  const ongoingEvents: string[] = [];
 
   return (
     <Box py={[0, 20]}>
@@ -169,7 +169,7 @@ export default function UserTickets() {
                       ) : (
                         /* Caso 3: Eventos pasados o restantes */
                         <Text color="green.300" fontWeight="bold" fontSize="sm" textAlign="center">
-                          {ticket.used === 1 ? `Ingreso ${formatFullDate(ticket.useDate)}` : "Ticket no utilizado"}
+                          {ticket.used === 1 ? `Ingreso ${formatFullDate(ticket.useDate)}` : "Sin ingreso registrado"}
                         </Text>
                       )}
 
