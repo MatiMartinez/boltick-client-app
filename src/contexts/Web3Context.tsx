@@ -95,6 +95,10 @@ export default function Web3Provider({ children }: Web3ProviderProps) {
                 name: "twitter",
                 showOnModal: false,
               },
+              facebook: {
+                name: "facebook",
+                showOnModal: false,
+              },
               discord: {
                 name: "discord",
                 showOnModal: false,
