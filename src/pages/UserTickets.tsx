@@ -30,7 +30,7 @@ export default function UserTickets() {
   const { tickets, isLoading, refreshTickets, selectedTicket, isOpen, onClose, handleShowQR, qrToken, timeLeft, generatingTicketId } = useUserTickets();
   const eventInfoModal = useEventInfoModal();
 
-  const activeEvents: string[] = [];
+  const activeEvents: string[] = ["navidad-en-el-bosque-2025"];
   const ongoingEvents: string[] = [];
 
   return (
