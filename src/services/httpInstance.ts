@@ -1,6 +1,12 @@
 import axios from "axios";
 export type { AxiosResponse as ApiResponse } from "axios";
 
+export interface IAPIResponse<T> {
+  success: number;
+  message: string;
+  data?: T;
+}
+
 declare module "axios" {
   interface AxiosRequestConfig {
     isPrivate?: boolean;

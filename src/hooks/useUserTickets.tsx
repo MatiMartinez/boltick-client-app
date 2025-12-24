@@ -28,9 +28,13 @@ const useUserTickets = () => {
     setIsLoading(true);
 
     try {
-      const data = await ticketService.getTickets(walletAddress);
+      const response = await ticketService.getTicketsByWallet(walletAddress);
 
-      const orderedTickets = data.tickets.sort((a, b) => {
+      if (response.success === 0 || !response.data) {
+        throw new Error(response.message);
+      }
+
+      const orderedTickets = response.data.sort((a, b) => {
         // Primero ordenar por uso: no usados (0) primero, usados (1) al final
         if (a.used !== b.used) {
           return a.used - b.used;
